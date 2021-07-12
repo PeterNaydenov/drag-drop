@@ -1,0 +1,20 @@
+{
+    "name": "@peter.naydenov/drag-drop",
+    "version": "0.0.1",
+    "description": "Basic drag and drop module. Extendable by hooks",
+    "keywords" :["drag","drop"],
+    "homepage": "https://github.com/PeterNaydenov/drag-drop",
+    "license": "ISC",
+    "main" : "src/main.js",
+  "scripts": {
+          "dev": "vite",
+          "build": "vite build",
+          "serve": "vite preview"
+      },
+  "devDependencies": {
+          "vite": "2.4.2"
+      },
+  "dependencies": {
+          "@peter.naydenov/fsm": "2.2.3"
+      }
+}
