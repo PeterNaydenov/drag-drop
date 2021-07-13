@@ -1,6 +1,6 @@
 # Drag-Drop (@peter.naydenov/drag-drop)
 
-( IN A HEAVY DEVELOPMENT. IT'S NOT SAVE TO USE IN A PRODUCTION )
+( IN A HEAVY DEVELOPMENT. IT'S NOT SAVE TO USE IN PRODUCTION )
 
 Platform independent "drag and drop" module. It's a try to simplify and automate `drag and drop` functionality as it possible.
 
@@ -13,9 +13,13 @@ Module `drag-drop` has settings and hooks that can customize your `drag and drop
 
 
 
+
+
+
+
+
+
 ## Installation
-
-
 
 ### Node based project
 Install `drag-drop` as a npm package:
@@ -57,6 +61,11 @@ Find the **ES** module in "`/dist`" folder - */dist/drag-drop.es.js*.  Add a scr
 
 
 
+
+
+
+
+
 ## How to use it
 
 When function `dragDrop()` is available for your project just call it: ` dragDrop()`. The function receives a configuration object as an argument but it is not required. By modifing configuration props and hooks you can modify the behaviour of the `drag-drop` module.
@@ -75,6 +84,14 @@ dragDrop ( config )
 ```
 
 
+
+
+
+
+
+
+
+
 ## Configuration Object
 
 Here is the configuration keys available and their default values. For keys that are not provided, `drag-drop` will use the default ones.
@@ -83,10 +100,18 @@ Here is the configuration keys available and their default values. For keys that
   dropStyle            : 'dropzone'   // CSS class name for drop zones
 , draggedTransperency  : 0.5          // Transperency of dragged DOM element
 , activeZoneStyle      : 'actZone'    // Active drop zone style name.
+, selectStyle          : 'dd-select'  // CSS class name for selected drag elements
 
 , onStartDragging : f   // A hook. [function]
 , onDrop          : f   // A hook. [function]
 ```
+
+
+
+
+
+
+
 
 
 ## Hooks
@@ -102,7 +127,12 @@ Content of default hooks is available in `src/hooks` folder. Feel free to use th
 
 
 
-## Methods
+
+
+
+
+
+## Drag-drop API
 
 Simpler way to use `drag-drop` is just to call a dragDrop function.
 
@@ -110,7 +140,7 @@ Simpler way to use `drag-drop` is just to call a dragDrop function.
  dragDrop ( config )
 ```
 
-Function returns a promise. Methods are coming as result of this promise:
+Function call returns a promise. Methods are coming as result of this promise:
 ```js
  let dragControl;
  dragDrop ( config )
