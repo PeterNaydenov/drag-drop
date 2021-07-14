@@ -41,7 +41,8 @@ const logic = {
                                 , activeDropZone       : null         // Active drop zone DOM element
                                 , activeZoneStyle      : 'actZone'    // Active drop zone style name
                                 , selectDraw           : null         // DOM node for showing selection
-                                , mouseSelection       : false         // Selection mode flag
+                                , mouseSelection       : false        // Selection mode flag
+                                , hasDrop              : false        // Flag[boolean]. It's true when registered drop event.
 
                                 , startX : 0
                                 , startY : 0

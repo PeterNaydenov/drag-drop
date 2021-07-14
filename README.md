@@ -117,8 +117,9 @@ Here is the configuration keys available and their default values. For keys that
 ## Hooks
 Hooks are function placeholders in configuration object. If they are defined, default behaviour on the event will be overwritten with the hooks. List of available hooks:
 ```js
- onStartDragging : 'Define what to happen on start dragging'
- onDrop          : 'Define what should happen on droping in a zone'
+   onStartDragging : 'Define what to happen on start dragging'
+ , onDrop          : 'Define what should happen on dropping in a drop-zone'
+ , onDropOut       : 'Define what should happen on dropping outside of the drop-zones'
 ```
 
 Content of default hooks is available in `src/hooks` folder. Feel free to use this code as starting point of your custom hooks.
@@ -173,5 +174,10 @@ Here is the list of methods provided in `drag-drop` api:
 ## Release History
 
 
+### 0.0.1 (2021-07-13 )
+- [x] New hook - onDropOut. When drop is out of drop zones.
+- [x] Fix: Dropzones. You can drop even on top of other child elements;
+
 ### 0.0.1 (2021-07-12 )
 - [x] Starting
+- [ ] Dropzones definition is wrong;

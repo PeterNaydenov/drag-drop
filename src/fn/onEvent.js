@@ -20,7 +20,10 @@ function getEventFunctions ( dragDrop ) {
         , mouseMove : event => dragDrop.update ( 'move', {event})
 
         , dragStart : event => dragDrop.update ( 'drag', {event})
-        , dragEnd   : event => dragDrop.update ( 'end', {event})
+        , dragEnd   : event => {
+                                dragDrop.ignoreCachedUpdates ()
+                                dragDrop.update ( 'end', {event})
+                            }
         , dragOver  : event => event.preventDefault ()   // Prevent default to allow drop
         , dragEnter : event => dragDrop.update ( 'move', {event})
         , drop      : event => dragDrop.update ( 'drop', {event})

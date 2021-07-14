@@ -15,7 +15,7 @@ const
     , eFn         = getEventFunctions ( dragMachine )
     , askForPromise = dragMachine.askForPromise
     ;
-    window.dd = dragMachine  // TODO: remove    
+    // window.dd = dragMachine  // TODO: remove    
     dragMachine.setDependencies ({ eFn, fn, askForPromise })
     return dragMachine.update ( 'start', { config, hooks } )
                .then ( hooks => dragMachine.setDependencies ({ hooks })    )
@@ -34,4 +34,7 @@ const
 
 export default dragDrop
 
+
+
+// dragDrop ()
 

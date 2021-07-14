@@ -1,29 +1,34 @@
 function drop ( task, dependencies, stateData, data ) {
     let 
           { event } = data
-        , { activeDropZone, dragged, selection } = stateData
+        , { activeDropZone, dragged, selection, dropStyle } = stateData
         , { hooks, fn } = dependencies
-        , check = ( activeDropZone == event.target )
         , log   = []
         , targetList = fn.targetList ( event.target )
+        , dropZone = fn.findDropZone ( event.target, dropStyle)
         ;
     event.preventDefault ()
-    selection.forEach ( el => {
-                    let 
-                        sourceList = fn.targetList ( el.parentNode )
-                      , item = {
-                                    source : el.parentNode
-                                  , target : event.target
-                                  , el
-                                  , targetList  // it's a function
-                                  , sourceList  // it's a function
-                              }
-                      ;
-                    log.push ( item )
-            })
-    if ( check )   hooks.onDrop ({ event, dragged, selection, log })
+    if ( dropZone == activeDropZone ) {
+                selection.forEach ( el => {
+                              let 
+                                  sourceList = fn.targetList ( el.parentNode )
+                                , item = {
+                                              source : el.parentNode
+                                            , target : dropZone
+                                            , el
+                                            , targetList  // it's a function
+                                            , sourceList  // it's a function
+                                        }
+                                ;
+                              log.push ( item )
+                      })
+                hooks.onDrop ({ event, dropZone, dragged, selection, log })
+                stateData.hasDrop = true
+        }
+    
     task.done ({
-                    success : true
+                      success : true
+                    , stateData
             })
 } // drop func.
 

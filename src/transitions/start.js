@@ -12,8 +12,6 @@ function start ( task, dependencies, stateData, data ) {
     document.addEventListener ( 'dragenter' , eFn.dragEnter )
     document.addEventListener ( 'drop'      , eFn.drop      )
 
-    // TODO: Set config params
-
     task.done ({ 
                       success  : true 
                     , response : data

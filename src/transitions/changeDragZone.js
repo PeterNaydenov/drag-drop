@@ -1,24 +1,28 @@
 function changeDragZone ( task, dependencies, stateData, data ) {
     let 
           { event } = data
+        , { fn    } = dependencies
         , { 
-              activeDropZone
+              activeDropZone : oldDropZone
+            , dragged
             , activeZoneStyle
             , dropStyle 
             } = stateData
-        , inActiveZone   = ( event.target == activeDropZone )
-        , inInternalItem = ( event.target.parentNode == activeDropZone )
-        , hasDropStyle   = ( event.target.classList.contains(dropStyle))
+        , actZone = false
         ;
-
-    if ( inActiveZone || inInternalItem ) {
+    if ( dragged.parentNode === event.target.parentNode ) {  
+                        task.done ({ success : true })                    
+                        return
+        }
+    actZone = fn.findDropZone ( event.target, dropStyle )
+    if ( !actZone ) {
                     task.done ({ success : false })
                     return
         }
-    if ( hasDropStyle ) {
-                    activeDropZone.classList.remove ( activeZoneStyle )
-                    event.target.classList.add ( activeZoneStyle )
-                    stateData.activeDropZone = event.target
+    if ( actZone ) {
+                    oldDropZone.classList.remove ( activeZoneStyle )
+                    actZone.classList.add ( activeZoneStyle )
+                    stateData.activeDropZone = actZone
                     task.done ({
                                   success : true
                                 , stateData
