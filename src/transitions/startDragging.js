@@ -1,16 +1,28 @@
 function startDragging ( task, dependencies, stateData, data ) {
         let 
               { event } = data
-            , { draggedTransperency, selection, selectStyle, dropStyle } = stateData
+            , { target } = event
+            , { draggedTransperency, selection, selectStyle, dropStyle, filter } = stateData
             , { hooks, fn } = dependencies
+            , validTarget = true
             ;
 
-        if ( selection.length === 0                                 )   selection = [ event.target ]
+        if ( filter )   validTarget = target.classList.contains ( filter )
+        if ( !validTarget ) {
+                task.done ({ success: false })
+                return
+            }
+
+        if ( selection.length === 0 )   selection = [ target ]
         hooks.onStartDragging ({ event, selection, draggedTransperency, selectStyle })
 
-        stateData.dragged        = event.target
+        stateData.dragged        = target
+        stateData.dragOffset     = { 
+                                         x : event.offsetX
+                                        ,y : event.offsetY
+                                    }
         stateData.selection      = selection
-        stateData.activeDropZone = fn.findDropZone ( event.target, dropStyle )
+        stateData.activeDropZone = fn.findDropZone ( target, dropStyle )
         task.done ({
                           success : true
                         , stateData

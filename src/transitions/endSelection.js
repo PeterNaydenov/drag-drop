@@ -2,7 +2,7 @@ function endSelection ( task, dependencies, stateData, data ) {
     let 
           { event } = data
         , { fn    } = dependencies
-        , { startX, startY, newX, newY, selectDraw, selectStyle } = stateData
+        , { startX, startY, newX, newY, selectDraw, selectStyle, filter } = stateData
         , selection = []
         , selectionType = 'new'   // Types: new | expand | reduce 
         ;
@@ -26,7 +26,18 @@ function endSelection ( task, dependencies, stateData, data ) {
         let { xMin, xMax, yMin, yMax } = fn.minMax ({ startX, startY, newX, newY })
         
         
-        let list = document.querySelectorAll ( '[draggable]' );
+        let 
+              dragNodes = document.querySelectorAll ( '[draggable]' )
+            , list = []
+            ;
+
+        if ( filter ) {
+                    dragNodes.forEach ( el => {
+                                    if ( el.classList.contains(filter) )   list.push ( el )
+                            })
+            }
+        else        dragNodes.forEach ( el => list.push(el)   )
+        
         list.forEach ( el => {
                             let check = true;
                             if ( check )   check = el.offsetLeft > xMin

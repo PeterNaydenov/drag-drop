@@ -1,4 +1,4 @@
-function onDrop ({ event, dropZone, dragged, selection, log }) {
+function onDrop ({ event, dropZone, dragged, selection, log, dragOffset }) {
         // Move dragged DOM elements to the selected drop target
         selection.forEach ( el => {
                         el.parentNode.removeChild ( el )

@@ -1,7 +1,7 @@
 function drop ( task, dependencies, stateData, data ) {
     let 
           { event } = data
-        , { activeDropZone, dragged, selection, dropStyle } = stateData
+        , { activeDropZone, dragged, selection, dropStyle, dragOffset } = stateData
         , { hooks, fn } = dependencies
         , log   = []
         , targetList = fn.targetList ( event.target )
@@ -22,10 +22,11 @@ function drop ( task, dependencies, stateData, data ) {
                                 ;
                               log.push ( item )
                       })
-                hooks.onDrop ({ event, dropZone, dragged, selection, log })
+                hooks.onDrop ({ event, dropZone, dragged, selection, log, dragOffset })
                 stateData.hasDrop = true
         }
     
+    stateData.dragOffset = null
     task.done ({
                       success : true
                     , stateData

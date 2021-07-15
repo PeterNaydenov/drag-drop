@@ -35,6 +35,7 @@ const logic = {
                  , stateData : {
                                   dropStyle            : 'dropzone'   // CSS class name for drop zone
                                 , selectStyle          : 'dd-select'  // CSS class name for selected drag elements
+                                , filter                : false        // CSS class name for selectable drag elements.
                                 , draggedTransperency  : 0.5          // Transperency of dragged DOM element
                                 , selection            : []           // Selected DOM elements
                                 , dragged              : null         // Dragged element. Could be one or many
@@ -43,6 +44,7 @@ const logic = {
                                 , selectDraw           : null         // DOM node for showing selection
                                 , mouseSelection       : false        // Selection mode flag
                                 , hasDrop              : false        // Flag[boolean]. It's true when registered drop event.
+                                , dragOffset           : null         // Values: Null or object with {x,y} coordinates or of the drag click. Can be used in 'onDrop' function for precise positioning.
 
                                 , startX : 0
                                 , startY : 0
