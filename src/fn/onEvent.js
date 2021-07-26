@@ -1,10 +1,11 @@
 'use strict'
 // *** 
 
-function getEventFunctions ( dragDrop ) {
+function getEventFunctions ( dragDrop, ignoreSelect ) {
     return {
           mouseDown: event => {
-                if ( event.target.draggable )   return
+                if ( event.target.draggable              )   return
+                if ( ignoreSelect && ignoreSelect(event) )   return
                 dragDrop.update ( 'select', {event})
             }
         

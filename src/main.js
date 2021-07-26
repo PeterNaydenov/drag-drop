@@ -9,10 +9,10 @@ import transitions from './transitions/index'         // Fsm transition library
 import getEventFunctions from './fn/onEvent';    // Functions registered on events
 
 
-function dragDrop ( config ) {
+function dragDrop ( config={} ) {
 const 
       dragMachine = new Fsm ( logic, transitions )
-    , eFn         = getEventFunctions ( dragMachine )
+    , eFn         = getEventFunctions ( dragMachine, config.ignoreSelect )
     , askForPromise = dragMachine.askForPromise
     ;
     // window.dd = dragMachine  // TODO: remove    
@@ -34,7 +34,4 @@ const
 
 export default dragDrop
 
-
-
-// dragDrop ()
 
