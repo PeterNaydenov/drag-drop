@@ -174,8 +174,11 @@ Here is the list of methods provided in `drag-drop` api:
 
 ## Release History
 
-### 0.3.1 (2021-07-29)
+### 0.3.2 (2021-07-29)
 - [x] Fix: JS error if drag container is not a drop-zone.
+
+### 0.3.1 (2021-07-29)
+- [] Error: broken build
 
 ### 0.3.0 (2021-07-26)
 - [x] Config contains a property `ignoreSelect`. It's a function that receive "event" as a argument and should return boolean (true/false). The function `ignoreSelect` control places where you can start dragging selection.
