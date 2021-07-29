@@ -30,7 +30,7 @@ function getEventFunctions ( dragDrop, ignoreSelect ) {
         , drop      : event => dragDrop.update ( 'drop', {event})
     
     }} // getEventFunctions func.
-    
+
 
 
 export default getEventFunctions

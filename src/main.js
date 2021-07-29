@@ -35,3 +35,4 @@ const
 export default dragDrop
 
 
+dragDrop ()

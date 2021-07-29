@@ -20,7 +20,7 @@ function changeDragZone ( task, dependencies, stateData, data ) {
                     return
         }
     if ( actZone ) {
-                    oldDropZone.classList.remove ( activeZoneStyle )
+                    if ( oldDropZone )   oldDropZone.classList.remove ( activeZoneStyle )
                     actZone.classList.add ( activeZoneStyle )
                     stateData.activeDropZone = actZone
                     task.done ({
