@@ -12,6 +12,7 @@ function endDragging ( task, dependencies, stateData, data ) {
         , { event } = data 
         , log = []
         ;
+        
     if ( !hasDrop ) {
                 let dropZone = false;
                 selection.forEach ( el => {

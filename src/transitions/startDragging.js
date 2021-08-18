@@ -1,6 +1,6 @@
 function startDragging ( task, dependencies, stateData, data ) {
         let 
-              { event } = data
+              { event  } = data
             , { target } = event
             , { draggedTransperency, selection, selectStyle, dropStyle, filter } = stateData
             , { hooks, fn } = dependencies

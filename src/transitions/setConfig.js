@@ -6,6 +6,7 @@ function setConfig ( task, dependencies, stateData, data={} ) {
 
     if ( config.onStartDragging )   hooks.onStartDragging = config.onStartDragging
     if ( config.onDrop          )   hooks.onDrop          = config.onDrop
+    if ( config.onDropOut       )   hooks.onDropOut       = config.onDropOut
 
     if ( config.dropStyle       && (typeof config.dropStyle === 'string')               )   stateData.dropStyle           = config.dropStyle
     if ( config.draggedTransperency && (typeof config.draggedTransperency === 'number') )   stateData.draggedTransperency = config.draggedTransperency
