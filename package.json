@@ -15,7 +15,7 @@
         "serve": "vite preview"
     },
     "devDependencies": {
-        "vite": "2.4.4"
+        "vite": "2.5.0"
     },
     "dependencies": {
         "@peter.naydenov/fsm": "2.2.3"
