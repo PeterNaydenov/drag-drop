@@ -101,6 +101,7 @@ Here is the configuration keys available and their default values. For keys that
 , draggedTransperency  : 0.5          // Transperency of dragged DOM element
 , activeZoneStyle      : 'actZone'    // Active drop zone style name.
 , selectStyle          : 'dd-select'  // CSS class name for selected drag elements
+, dependencies         : {} // Object will be available as prop in the hook functions. Available after version 0.4.0
 
 , onStartDragging : f   // A hook. [function]
 , onDrop          : f   // A hook. [function]
@@ -173,6 +174,9 @@ Here is the list of methods provided in `drag-drop` api:
 
 
 ## Release History
+
+### 0.4.0 (2021-09-03)
+- [x] Config object was extended with 'dependencies'. The object will be injected and available to hook functions;
 
 ### 0.3.3 (2021-08-18)
 - [x] Fix: Hook 'onDropOut' doesn't work;

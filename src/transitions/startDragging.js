@@ -2,7 +2,7 @@ function startDragging ( task, dependencies, stateData, data ) {
         let 
               { event  } = data
             , { target } = event
-            , { draggedTransperency, selection, selectStyle, dropStyle, filter } = stateData
+            , { draggedTransperency, selection, selectStyle, dropStyle, filter, dependencies:deps } = stateData
             , { hooks, fn } = dependencies
             , validTarget = true
             ;
@@ -14,7 +14,7 @@ function startDragging ( task, dependencies, stateData, data ) {
             }
 
         if ( selection.length === 0 )   selection = [ target ]
-        hooks.onStartDragging ({ event, selection, draggedTransperency, selectStyle })
+        hooks.onStartDragging ({ event, selection, draggedTransperency, selectStyle, dependencies:deps })
 
         stateData.dragged        = target
         stateData.dragOffset     = { 

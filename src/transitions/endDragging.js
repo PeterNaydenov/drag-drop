@@ -8,6 +8,7 @@ function endDragging ( task, dependencies, stateData, data ) {
             , selection
             , selectStyle
             , hasDrop
+            , dependencies: deps
           } = stateData
         , { event } = data 
         , log = []
@@ -27,7 +28,7 @@ function endDragging ( task, dependencies, stateData, data ) {
                               ;
                             log.push ( item )
                     })
-              hooks.onDropOut ({event, dropZone, dragged, selection, log })
+              hooks.onDropOut ({event, dropZone, dragged, selection, log, dependencies:deps })
         }
     activeDropZone.classList.remove ( activeZoneStyle )
     selection.forEach ( el => {
