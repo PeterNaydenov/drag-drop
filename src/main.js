@@ -34,4 +34,20 @@ const
 
 export default dragDrop
 
+function yok () { console.log ( 'injected' )}
 
+const cfg = {
+            ignoreSelect ( e ) {
+                        const tg = e.target;
+                        if (!tg.classList.contains ( 'dropzone' ))   return true
+                        else         return false
+                }
+          , onDropOut ({event, dropZone, dragged, selection, log, dragOffset, dependencies }) {
+                        console.log ( 'YES drop out' )
+                        dependencies.yok ()
+                }
+          , dependencies : {
+                                yok
+                        }
+        }
+dragDrop (cfg)

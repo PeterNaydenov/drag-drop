@@ -1,1 +1,839 @@
-var e=Object.defineProperty,t=Object.getOwnPropertySymbols,n=Object.prototype.hasOwnProperty,o=Object.prototype.propertyIsEnumerable,a=(t,n,o)=>n in t?e(t,n,{enumerable:!0,configurable:!0,writable:!0,value:o}):t[n]=o,s=(e,s)=>{for(var r in s||(s={}))n.call(s,r)&&a(e,r,s[r]);if(t)for(var r of t(s))o.call(s,r)&&a(e,r,s[r]);return e};function r(){let e,t;const n=new Promise(((n,o)=>{e=n,t=o}));return{promise:n,done:e,cancel:t,onComplete:c(n)}}function c(e){return function(t){e.then((e=>t(e)))}}const i=function(e){let t,n=!1;e?(t=function(e){let t=e.map((e=>r())),n=t.map((e=>e.promise));return t.promises=n,t.onComplete=c(Promise.all(n)),t}(e),n=!0):t=r();return t.timeout=function(e,t){let n;n=e?Promise.all(t.promises):t.promise;return function(e,o){let a,s=new Promise(((t,s)=>{a=setTimeout((()=>{t(o),Promise.resolve(n)}),e)}));return n.then((()=>clearTimeout(a))),t.onComplete=c(Promise.race([n,s])),t}}(n,t),t},d={_setTransitions:function(){return function(e,t){let n={},o={},a={};return e.forEach((e=>{const[s,r,c,i,d]=e,l=t[i],u=`${s}/${r}`;n[u]=l||null,o[u]=c,function(e){return e instanceof Array&&(2==e.length&&(e.forEach((e=>{if(!1!==e||"string"!=typeof e)return!1})),!0))}(d)&&(a[u]=[],a[u][0]=d[0],a[u][1]=d[1])})),{transitions:n,nextState:o,chainActions:a}}},_updateStep:function(e){return function(t,n,o){const a=e.askForPromise(),s=`${e.state}/${n}`,r=e.callback;e.lock=!0,e._transit(a,s,o),a.onComplete((n=>{let o=e._getChain(e.chainActions,s),a=n.response;if(n.success){if(e.state=e.nextState[s],n.stateData&&(e.stateData=n.stateData),r.positive.forEach((t=>t(e.state,a))),r.transition.forEach((t=>t(e.state,a))),o&&o[0])return void e._updateStep(t,o[0],a)}else if(r.negative.forEach((t=>t(e.state,a))),r.transition.forEach((t=>t(e.state,a))),o&&o[1])return void e._updateStep(t,o[1],a);n.command?e._updateStep(t,n.command,a):t.done(a)})),a.promise.catch((()=>console.log(`Failed in step ${s}`)))}},_warn:function(e){return function(e){Object.keys(e).forEach((t=>{null==e[t]&&console.log(`Warning: Transition for ${t} is not defined`)}))}},_transit:function(e){return function(t,n,o){const a=e.dependencies,r=s({},e.stateData),c=e.transitions[n];"function"==typeof c?c(t,a,r,o):t.done({success:!1})}},_getChain:function(){return function(e,t){return!!e[t]&&e[t]}},_triggerCacheUpdate:function(e){return function(){if(0!==e.cache.length){const{updateTask:t,action:n,dt:o}=e.cache[0];e.cache=e.cache.reduce(((e,t,n)=>(0!=n&&e.push(t),e)),[]),e._updateStep(t,n,o),t.onComplete((t=>e._onUpdateTask(t)))}}},_onUpdateTask:function(e){return function(t){const n=e.callback,o=e.askForPromise(n.update);n.update.forEach(((n,a)=>{n(e.state,t),o[a].done()})),o.onComplete((t=>{e.lock=!1,e._triggerCacheUpdate()}))}},setDependencies:function(e){return function(t){e.dependencies=s(s({},e.dependencies),t)}},on:function(e){return function(t,n){const o=e.callback;o[t]&&o[t].push(n)}},off:function(e){return function(t){e.callback[t]&&(e.callback[t]=[])}},importState:function(e){return function({state:t,stateData:n}){t&&(e.state=t,e.stateData=s({},n))}},exportState:function(e){return function(){return{state:e.state,stateData:s({},e.stateData)}}},update:function(e){return function(t,n){const o=e.askForPromise();return e.lock?(e.cache.push({updateTask:o,action:t,dt:n}),o.promise):(e._updateStep(o,t,n),o.onComplete((t=>e._onUpdateTask(t))),o.promise)}},reset:function(e){return function(){e.state=e.initialState,e.stateData=e.initialStateData}},ignoreCachedUpdates:function(e){return function(){e.cache.forEach((({updateTask:e,action:t,dt:n})=>e.cancel(`Action '${t}' was ignored`))),e.cache=[]}},getState:function(e){return function(){return e.state}}};var l=function({init:e,table:t,stateData:n,debug:o},a={}){const r=this,c=Object.keys(d);r.state=e||"N/A",r.initialState=e||"N/A",r.lock=!1,r.cache=[],r.askForPromise=i,r.stateData=s({},n),r.initialStateData=s({},n),r.dependencies={},r.callback={update:[],transition:[],positive:[],negative:[]},c.forEach((e=>r[e]=d[e](r)));const{transitions:l,nextState:u,chainActions:p}=r._setTransitions(t,a);o&&r._warn(l),r.transitions=l,r.nextState=u,r.chainActions=p};function u(e,t){return{mouseDown:n=>{n.target.draggable||t&&t(n)||e.update("select",{event:n})},mouseUp:t=>{t.target.draggable?t.altKey?e.update("removeItem",{event:t}):t.shiftKey?e.update("addItem",{event:t}):e.update("newSelection",{event:t}):e.update("end",{event:t})},mouseMove:t=>e.update("move",{event:t}),dragStart:t=>e.update("drag",{event:t}),dragEnd:t=>{e.ignoreCachedUpdates(),e.update("end",{event:t})},dragOver:e=>e.preventDefault(),dragEnter:t=>e.update("move",{event:t}),drop:t=>e.update("drop",{event:t})}}const p={minMax:function({startX:e,startY:t,newX:n,newY:o}){return{xMin:Math.min(e,n),xMax:Math.max(e,n),yMin:Math.min(t,o),yMax:Math.max(t,o)}},updateSelection:function(e,t){const{xMin:n,xMax:o,yMin:a,yMax:s}=e;t.style.left=`${n}px`,t.style.top=`${a}px`,t.style.width=o-n+"px",t.style.height=s-a+"px"},drawSelection:function(e,t){let n;return t?(n=t,n.style.visibility="visible"):(n=document.createElement("div"),n.style.position="absolute",n.style.border="1px dotted #333",document.getElementsByTagName("body")[0].appendChild(n)),n.style.left=`${e.clientX}px`,n.style.top=`${e.clientY}px`,n.style.width="20px",n.style.height="20px",n},targetList:function(e){return function(){let t=document.querySelectorAll("[draggable]"),n=[];return t.forEach((t=>{t.parentNode==e&&n.push(t)})),n}},findDropZone:function e(t,n){return t!==document&&("BODY"!=t.tagName&&(t.classList.contains(n)?t:e(t.parentNode,n)))},getEventFunctions:u};const f={onDrop:function({event:e,dropZone:t,dragged:n,selection:o,log:a,dragOffset:s}){o.forEach((e=>{e.parentNode.removeChild(e),t.appendChild(e)})),n.style=""},onStartDragging:function({event:e,selection:t,draggedTransperency:n,selectStyle:o}){t.forEach((e=>{e.style.opacity=n,e.classList.add(o)}))},onDropOut:function({event:e,dropZone:t,dragged:n,selection:o,log:a,dragOffset:s}){console.log("DROP OUT")}},g={init:"none",table:[["none","start","wait","setConfig",["start",!1]],["wait","start","ready","start"],["ready","addItem","ready","addSingleItem"],["ready","newSelection","ready","replaceSelection"],["ready","removeItem","ready","removeSingleItem"],["ready","select","inSelect","startSelection"],["inSelect","move","inSelect","changeSelection"],["inSelect","end","ready","endSelection"],["ready","drag","inDrag","startDragging"],["inDrag","end","ready","endDragging"],["inDrag","move","inDrag","changeDragZone"],["inDrag","drop","inDrag","drop"],["ready","disable","off","disable"],["off","enable","ready","enable"],["off","changeConfig","off","setConfig"],["ready","changeConfig","ready","setConfig"],["ready","destroy","end","destroy"],["off","destroy","end","destroy"]],stateData:{dropStyle:"dropzone",selectStyle:"dd-select",filter:!1,draggedTransperency:.5,selection:[],dragged:null,activeDropZone:null,activeZoneStyle:"actZone",selectDraw:null,mouseSelection:!1,hasDrop:!1,dragOffset:null,startX:0,startY:0,newX:!1,newY:!1}};const m={start:function(e,t,n,o){let{eFn:a}=t;document.addEventListener("mousedown",a.mouseDown),document.addEventListener("mousemove",a.mouseMove),document.addEventListener("mouseup",a.mouseUp),document.addEventListener("dragstart",a.dragStart),document.addEventListener("dragend",a.dragEnd),document.addEventListener("dragover",a.dragOver),document.addEventListener("dragenter",a.dragEnter),document.addEventListener("drop",a.drop),e.done({success:!0,response:o})},startSelection:function(e,t,n,o){const{event:a}=o,{fn:s}=t,{selectDraw:r}=n;a.preventDefault(),n.selectDraw=s.drawSelection(a,r),n.mouseSelection=!0,n.startX=a.clientX,n.startY=a.clientY,e.done({success:!0,stateData:n})},changeSelection:function(e,t,n,o){let{mouseSelection:a,selectDraw:s,startX:r,startY:c}=n,{event:i}=o,{fn:d}=t;if(!a)return void e.done({success:!1});i.preventDefault();let l=i.clientX,u=i.clientY;d.updateSelection(d.minMax({startX:r,startY:c,newX:l,newY:u}),s),n.newX=l,n.newY=u,e.done({success:!0,stateData:n})},endSelection:function(e,t,n,o){let{event:a}=o,{fn:s}=t,{startX:r,startY:c,newX:i,newY:d,selectDraw:l,selectStyle:u,filter:p}=n,f=[],g="new";if(a.preventDefault(),l.style.visibility="hidden",!i)return n.selection.forEach((e=>e.classList.remove(u))),n.selection=[],void e.done({success:!0,stateData:n});a.altKey&&(g="reduce"),a.shiftKey&&(g="expand"),"expand"!==g&&n.selection.forEach((e=>e.classList.remove(u)));let{xMin:m,xMax:v,yMin:y,yMax:h}=s.minMax({startX:r,startY:c,newX:i,newY:d}),D=document.querySelectorAll("[draggable]"),S=[];switch(p?D.forEach((e=>{e.classList.contains(p)&&S.push(e)})):D.forEach((e=>S.push(e))),S.forEach((e=>{let t=!0;if(t&&(t=e.offsetLeft>m),t&&(t=e.offsetTop>y),t){t=e.offsetLeft+e.clientWidth<v}if(t){t=e.offsetTop+e.clientHeight<h}t&&f.push(e)})),g){case"new":n.selection=f.map((e=>(e.classList.add(u),e)));break;case"expand":n.selection=f.reduce(((e,t)=>(e.includes(t)||(e.push(t),t.classList.add(u)),e)),n.selection);break;case"reduce":n.selection=n.selection.reduce(((e,t)=>(f.includes(t)||(e.push(t),t.classList.add(u)),e)),[])}n.mouseSelection=!1,n.newX=!1,n.newY=!1,e.done({success:!0,stateData:n})},addSingleItem:function(e,t,n,o){let{event:a}=o,s=a.target,{selection:r,selectStyle:c,filter:i}=n,d=r.includes(s),l=!0;i&&(l=s.classList.contains(i)),!d&&l&&(r.push(s),s.classList.add(c)),e.done({success:!0,stateData:n})},removeSingleItem:function(e,t,n,o){let{event:a}=o,s=a.target,{selection:r,selectStyle:c}=n;n.selection=r.reduce(((e,t)=>(t!=s?e.push(t):t.classList.remove(c),e)),[]),e.done({success:!0,stateData:n})},replaceSelection:function(e,t,n,o){let{event:a}=o,{selectStyle:s,filter:r}=n,c=a.target,i=!0;r&&(i=c.classList.contains(r)),i?(n.selection.forEach((e=>e.classList.remove(s))),c.classList.add(s),n.selection=[c],e.done({success:!0,stateData:n})):e.done({success:!1})},startDragging:function(e,t,n,o){let{event:a}=o,{target:s}=a,{draggedTransperency:r,selection:c,selectStyle:i,dropStyle:d,filter:l,dependencies:u}=n,{hooks:p,fn:f}=t,g=!0;l&&(g=s.classList.contains(l)),g?(0===c.length&&(c=[s]),p.onStartDragging({event:a,selection:c,draggedTransperency:r,selectStyle:i,dependencies:u}),n.dragged=s,n.dragOffset={x:a.offsetX,y:a.offsetY},n.selection=c,n.activeDropZone=f.findDropZone(s,d),e.done({success:!0,stateData:n})):e.done({success:!1})},changeDragZone:function(e,t,n,o){let{event:a}=o,{fn:s}=t,{activeDropZone:r,dragged:c,activeZoneStyle:i,dropStyle:d}=n,l=!1;if(c.parentNode!==a.target.parentNode){if(l=s.findDropZone(a.target,d),l)return l?(r&&r.classList.remove(i),l.classList.add(i),n.activeDropZone=l,void e.done({success:!0,stateData:n})):void e.done({success:!1});e.done({success:!1})}else e.done({success:!0})},endDragging:function(e,t,n,o){let{hooks:a,fn:s}=t,{activeDropZone:r,activeZoneStyle:c,dragged:i,selection:d,selectStyle:l,hasDrop:u,dependencies:p}=n,{event:f}=o,g=[];if(!u){let e=!1;d.forEach((e=>{let t=s.targetList(e.parentNode),n={source:e.parentNode,target:!1,el:e,sourceList:t};g.push(n)})),a.onDropOut({event:f,dropZone:e,dragged:i,selection:d,log:g,dependencies:p})}r.classList.remove(c),d.forEach((e=>{e.classList.remove(l),e.style.opacity="",e.style[0]||e.removeAttribute("style")})),n.activeDropZone=null,n.selection=[],n.hasDrop=!1,e.done({success:!0,stateData:n})},drop:function(e,t,n,o){let{event:a}=o,{activeDropZone:s,dragged:r,selection:c,dropStyle:i,dragOffset:d,dependencies:l}=n,{hooks:u,fn:p}=t,f=[],g=p.targetList(a.target),m=p.findDropZone(a.target,i);a.preventDefault(),m==s&&(c.forEach((e=>{let t=p.targetList(e.parentNode),n={source:e.parentNode,target:m,el:e,targetList:g,sourceList:t};f.push(n)})),u.onDrop({event:a,dropZone:m,dragged:r,selection:c,log:f,dragOffset:d,dependencies:l}),n.hasDrop=!0),n.dragOffset=null,e.done({success:!0,stateData:n})},destroy:function(e,t,n,o){let{eFn:a}=t;document.removeEventListener("mousedown",a.mouseDown),document.removeEventListener("mousemove",a.mouseMove),document.removeEventListener("mouseup",a.mouseUp),document.removeEventListener("dragstart",a.dragStart),document.removeEventListener("dragend",a.dragEnd),document.removeEventListener("dragover",a.dragOver),document.removeEventListener("dragenter",a.dragEnter),document.removeEventListener("drop",a.drop),e.done({success:!0})},setConfig:function(e,t,n,o={}){let{hooks:a,config:s}=o;a||(a={}),s||(s={}),s.onStartDragging&&(a.onStartDragging=s.onStartDragging),s.onDrop&&(a.onDrop=s.onDrop),s.onDropOut&&(a.onDropOut=s.onDropOut),s.dropStyle&&"string"==typeof s.dropStyle&&(n.dropStyle=s.dropStyle),s.draggedTransperency&&"number"==typeof s.draggedTransperency&&(n.draggedTransperency=s.draggedTransperency),s.activeZoneStyle&&"string"==typeof s.activeZoneStyle&&(n.activeZoneStyle=s.activeZoneStyle),s.selectStyle&&"string"==typeof s.selectStyle&&(n.selectStyle=s.selectStyle),s.filter&&"string"==typeof s.filter&&(n.filter=s.filter),s.dependencies?n.dependencies=s.dependencies:n.dependencies={},e.done({success:!0,stateData:n,response:a})},disable:function(e,t,n,o){e.done({success:!0})},enable:function(e,t,n,o){e.don({success:!0})}};function v(e={}){const t=new l(g,m),n=u(t,e.ignoreSelect),o=t.askForPromise;return t.setDependencies({eFn:n,fn:p,askForPromise:o}),t.update("start",{config:e,hooks:f}).then((e=>t.setDependencies({hooks:e}))).then((()=>({changeConfig:e=>{t.update("changeConfig",{hooks:f,config:e}).then((e=>t.setDependencies({hooks:e})))},destroy:()=>t.update("destroy"),disable:()=>t.update("disable"),enable:()=>t.update("enable")})))}export default v;
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var askForPromise_1 = askForPromise$1;
+function askForPromise$1(list) {
+  let isList = false, askObject;
+  if (list) {
+    askObject = _manyPromises(list);
+    isList = true;
+  } else
+    askObject = _singlePromise();
+  askObject.timeout = _timeout(isList, askObject);
+  return askObject;
+}
+function _singlePromise() {
+  let done, cancel;
+  const x = new Promise((resolve, reject) => {
+    done = resolve;
+    cancel = reject;
+  });
+  return {
+    promise: x,
+    done,
+    cancel,
+    onComplete: _after(x)
+  };
+}
+function _manyPromises(list) {
+  let askObject = list.map((el) => _singlePromise());
+  let askList = askObject.map((o) => o.promise);
+  askObject["promises"] = askList;
+  askObject["onComplete"] = _after(Promise.all(askList));
+  return askObject;
+}
+function _after(x) {
+  return function(fx) {
+    x.then((res) => fx(res));
+  };
+}
+function _timeout(isList, askObject) {
+  let main;
+  if (isList)
+    main = Promise.all(askObject.promises);
+  else
+    main = askObject.promise;
+  return function(ttl, expMsg) {
+    let timer;
+    let timeout = new Promise((resolve, reject) => {
+      timer = setTimeout(() => {
+        resolve(expMsg);
+        Promise.resolve(main);
+      }, ttl);
+    });
+    main.then(() => clearTimeout(timer));
+    askObject["onComplete"] = _after(Promise.race([main, timeout]));
+    return askObject;
+  };
+}
+function _setTransitions$1() {
+  return function(table2, lib) {
+    let transitions = {}, nextState = {}, chainActions = {};
+    table2.forEach((el) => {
+      const [from, action, next, transitionName, alt] = el, transition = lib[transitionName], key = `${from}/${action}`;
+      transitions[key] = transition || null;
+      nextState[key] = next;
+      if (_isAltValid(alt)) {
+        chainActions[key] = [];
+        chainActions[key][0] = alt[0];
+        chainActions[key][1] = alt[1];
+      }
+    });
+    return { transitions, nextState, chainActions };
+  };
+}
+function _isAltValid(alt) {
+  if (!(alt instanceof Array))
+    return false;
+  if (alt.length != 2)
+    return false;
+  alt.forEach((m) => {
+    if (m !== false || typeof m != "string")
+      return false;
+  });
+  return true;
+}
+var _setTransitions_1 = _setTransitions$1;
+function _updateStep$1(fsm) {
+  return function(updateTask, action, dt) {
+    const task = fsm.askForPromise(), key = `${fsm.state}/${action}`, cb = fsm.callback;
+    fsm.lock = true;
+    fsm._transit(task, key, dt);
+    task.onComplete((result) => {
+      let chainActions = fsm._getChain(fsm.chainActions, key), data = result.response;
+      if (result.success) {
+        fsm.state = fsm.nextState[key];
+        if (result.stateData)
+          fsm.stateData = result.stateData;
+        cb["positive"].forEach((fn2) => fn2(fsm.state, data));
+        cb["transition"].forEach((fn2) => fn2(fsm.state, data));
+        if (chainActions && chainActions[0]) {
+          fsm._updateStep(updateTask, chainActions[0], data);
+          return;
+        }
+      } else {
+        cb["negative"].forEach((fn2) => fn2(fsm.state, data));
+        cb["transition"].forEach((fn2) => fn2(fsm.state, data));
+        if (chainActions && chainActions[1]) {
+          fsm._updateStep(updateTask, chainActions[1], data);
+          return;
+        }
+      }
+      if (result.command) {
+        fsm._updateStep(updateTask, result.command, data);
+        return;
+      }
+      updateTask.done(data);
+    });
+    task.promise.catch(() => console.log(`Failed in step ${key}`));
+  };
+}
+var _updateStep_1 = _updateStep$1;
+function _warn$1(fsm) {
+  return function(transitions) {
+    Object.keys(transitions).forEach((k) => {
+      if (transitions[k] == null)
+        console.log(`Warning: Transition for ${k} is not defined`);
+    });
+  };
+}
+var _warn_1 = _warn$1;
+function _transit$1(fsm) {
+  return function(task, key, dt) {
+    const dependencies = fsm.dependencies, stateData = __spreadValues({}, fsm.stateData), transition = fsm.transitions[key];
+    if (typeof transition === "function")
+      transition(task, dependencies, stateData, dt);
+    else
+      task.done({ success: false });
+  };
+}
+var _transit_1 = _transit$1;
+function _getChain$1() {
+  return function(chainActions, key) {
+    if (!chainActions[key])
+      return false;
+    return chainActions[key];
+  };
+}
+var _getChain_1 = _getChain$1;
+function _triggerCacheUpdate$1(fsm) {
+  return function() {
+    if (fsm.cache.length !== 0) {
+      const { updateTask, action, dt } = fsm.cache[0];
+      fsm.cache = fsm.cache.reduce((res, el, i) => {
+        if (i != 0)
+          res.push(el);
+        return res;
+      }, []);
+      fsm._updateStep(updateTask, action, dt);
+      updateTask.onComplete((data) => fsm._onUpdateTask(data));
+    }
+  };
+}
+var _triggerCacheUpdate_1 = _triggerCacheUpdate$1;
+function _onUpdateTask$1(fsm) {
+  return function _onUpdateTask2(data) {
+    const cb = fsm.callback, updateCallbacks = fsm.askForPromise(cb["update"]);
+    cb["update"].forEach((fn2, i) => {
+      fn2(fsm.state, data);
+      updateCallbacks[i].done();
+    });
+    updateCallbacks.onComplete((x) => {
+      fsm.lock = false;
+      fsm._triggerCacheUpdate();
+    });
+  };
+}
+var _onUpdateTask_1 = _onUpdateTask$1;
+function setDependencies$1(fsm) {
+  return function(deps) {
+    fsm.dependencies = __spreadValues(__spreadValues({}, fsm.dependencies), deps);
+  };
+}
+var setDependencies_1 = setDependencies$1;
+function on$1(fsm) {
+  return function(eName, fn2) {
+    const cb = fsm.callback;
+    if (cb[eName])
+      cb[eName].push(fn2);
+  };
+}
+var on_1 = on$1;
+function off$1(fsm) {
+  return function(eName) {
+    if (!fsm.callback[eName])
+      return;
+    fsm.callback[eName] = [];
+  };
+}
+var off_1 = off$1;
+function importState$1(fsm) {
+  return function({ state, stateData }) {
+    if (state) {
+      fsm.state = state;
+      fsm.stateData = __spreadValues({}, stateData);
+    }
+  };
+}
+var importState_1 = importState$1;
+function exportState$1(fsm) {
+  return function() {
+    const state = fsm.state, stateData = __spreadValues({}, fsm.stateData);
+    return {
+      state,
+      stateData
+    };
+  };
+}
+var exportState_1 = exportState$1;
+function update$1(fsm) {
+  return function(action, dt) {
+    const updateTask = fsm.askForPromise();
+    if (fsm.lock) {
+      fsm.cache.push({ updateTask, action, dt });
+      return updateTask.promise;
+    }
+    fsm._updateStep(updateTask, action, dt);
+    updateTask.onComplete((data) => fsm._onUpdateTask(data));
+    return updateTask.promise;
+  };
+}
+var update_1 = update$1;
+function reset$1(fsm) {
+  return function() {
+    fsm.state = fsm.initialState;
+    fsm.stateData = fsm.initialStateData;
+  };
+}
+var reset_1 = reset$1;
+function ignoreCachedUpdates$1(fsm) {
+  return function() {
+    const cache = fsm.cache;
+    cache.forEach(({ updateTask, action, dt }) => updateTask.cancel(`Action '${action}' was ignored`));
+    fsm.cache = [];
+  };
+}
+var ignoreCacheUpdates = ignoreCachedUpdates$1;
+function getState$1(fsm) {
+  return function() {
+    return fsm.state;
+  };
+}
+var getState_1 = getState$1;
+const _setTransitions = _setTransitions_1, _updateStep = _updateStep_1, _warn = _warn_1, _transit = _transit_1, _getChain = _getChain_1, _triggerCacheUpdate = _triggerCacheUpdate_1, _onUpdateTask = _onUpdateTask_1, setDependencies = setDependencies_1, on = on_1, off = off_1, importState = importState_1, exportState = exportState_1, update = update_1, reset = reset_1, ignoreCachedUpdates = ignoreCacheUpdates, getState = getState_1;
+const fn$1 = {
+  _setTransitions,
+  _updateStep,
+  _warn,
+  _transit,
+  _getChain,
+  _triggerCacheUpdate,
+  _onUpdateTask,
+  setDependencies,
+  on,
+  off,
+  importState,
+  exportState,
+  update,
+  reset,
+  ignoreCachedUpdates,
+  getState
+};
+var methods$1 = fn$1;
+const MISSING_STATE = "N/A", askForPromise = askForPromise_1, methods = methods$1;
+function Fsm({ init, table: table2, stateData, debug }, lib = {}) {
+  const fsm = this, fnKeys = Object.keys(methods);
+  fsm.state = init || MISSING_STATE;
+  fsm.initialState = init || MISSING_STATE;
+  fsm.lock = false;
+  fsm.cache = [];
+  fsm.askForPromise = askForPromise;
+  fsm.stateData = __spreadValues({}, stateData);
+  fsm.initialStateData = __spreadValues({}, stateData);
+  fsm.dependencies = {};
+  fsm.callback = {
+    update: [],
+    transition: [],
+    positive: [],
+    negative: []
+  };
+  fnKeys.forEach((k) => fsm[k] = methods[k](fsm));
+  const { transitions, nextState, chainActions } = fsm._setTransitions(table2, lib);
+  if (debug)
+    fsm._warn(transitions);
+  fsm.transitions = transitions;
+  fsm.nextState = nextState;
+  fsm.chainActions = chainActions;
+}
+var src = Fsm;
+function minMax({ startX, startY, newX, newY }) {
+  let xMin = Math.min(startX, newX), xMax = Math.max(startX, newX), yMin = Math.min(startY, newY), yMax = Math.max(startY, newY);
+  return { xMin, xMax, yMin, yMax };
+}
+function updateSelection(coordinates, node) {
+  const { xMin, xMax, yMin, yMax } = coordinates;
+  node.style.left = `${xMin}px`;
+  node.style.top = `${yMin}px`;
+  node.style.width = `${xMax - xMin}px`;
+  node.style.height = `${yMax - yMin}px`;
+}
+function drawSelection(event, selectDraw) {
+  let draw;
+  if (!selectDraw) {
+    draw = document.createElement("div");
+    draw.style.position = "absolute";
+    draw.style.border = "1px dotted #333";
+    document.getElementsByTagName("body")[0].appendChild(draw);
+  } else {
+    draw = selectDraw;
+    draw.style.visibility = "visible";
+  }
+  draw.style.left = `${event.clientX}px`;
+  draw.style.top = `${event.clientY}px`;
+  draw.style.width = "20px";
+  draw.style.height = "20px";
+  return draw;
+}
+function targetList(container) {
+  return function targetList2() {
+    let list = document.querySelectorAll("[draggable]"), selection = [];
+    list.forEach((el) => {
+      if (el.parentNode == container)
+        selection.push(el);
+    });
+    return selection;
+  };
+}
+function findDropZone(node, dropStyle) {
+  if (node === document)
+    return false;
+  if (node.tagName == "BODY")
+    return false;
+  if (node.classList.contains(dropStyle))
+    return node;
+  return findDropZone(node.parentNode, dropStyle);
+}
+function getEventFunctions(dragDrop2, ignoreSelect) {
+  return {
+    mouseDown: (event) => {
+      if (event.target.draggable)
+        return;
+      if (ignoreSelect && ignoreSelect(event))
+        return;
+      dragDrop2.update("select", { event });
+    },
+    mouseUp: (event) => {
+      if (event.target.draggable) {
+        if (event.altKey)
+          dragDrop2.update("removeItem", { event });
+        else if (event.shiftKey)
+          dragDrop2.update("addItem", { event });
+        else
+          dragDrop2.update("newSelection", { event });
+        return;
+      }
+      dragDrop2.update("end", { event });
+    },
+    mouseMove: (event) => dragDrop2.update("move", { event }),
+    dragStart: (event) => dragDrop2.update("drag", { event }),
+    dragEnd: (event) => {
+      dragDrop2.ignoreCachedUpdates();
+      dragDrop2.update("end", { event });
+    },
+    dragOver: (event) => event.preventDefault(),
+    dragEnter: (event) => dragDrop2.update("move", { event }),
+    drop: (event) => dragDrop2.update("drop", { event })
+  };
+}
+const fn = {
+  minMax,
+  updateSelection,
+  drawSelection,
+  targetList,
+  findDropZone,
+  getEventFunctions
+};
+function onDrop({ event, dropZone, dragged, selection, log, dragOffset }) {
+  selection.forEach((el) => {
+    el.parentNode.removeChild(el);
+    dropZone.appendChild(el);
+  });
+  dragged.style = "";
+}
+function onStartDragging({ event, selection, draggedTransperency, selectStyle }) {
+  selection.forEach((el) => {
+    el.style.opacity = draggedTransperency;
+    el.classList.add(selectStyle);
+  });
+}
+function onDropOut({ event, dropZone, dragged, selection, log, dragOffset }) {
+  console.log("DROP OUT");
+}
+const hooks = {
+  onDrop,
+  onStartDragging,
+  onDropOut
+};
+const table = [
+  ["none", "start", "wait", "setConfig", ["start", false]],
+  ["wait", "start", "ready", "start"],
+  ["ready", "addItem", "ready", "addSingleItem"],
+  ["ready", "newSelection", "ready", "replaceSelection"],
+  ["ready", "removeItem", "ready", "removeSingleItem"],
+  ["ready", "select", "inSelect", "startSelection"],
+  ["inSelect", "move", "inSelect", "changeSelection"],
+  ["inSelect", "end", "ready", "endSelection"],
+  ["ready", "drag", "inDrag", "startDragging"],
+  ["inDrag", "end", "ready", "endDragging"],
+  ["inDrag", "move", "inDrag", "changeDragZone"],
+  ["inDrag", "drop", "inDrag", "drop"],
+  ["ready", "disable", "off", "disable"],
+  ["off", "enable", "ready", "enable"],
+  ["off", "changeConfig", "off", "setConfig"],
+  ["ready", "changeConfig", "ready", "setConfig"],
+  ["ready", "destroy", "end", "destroy"],
+  ["off", "destroy", "end", "destroy"]
+];
+const logic = {
+  init: "none",
+  table,
+  stateData: {
+    dropStyle: "dropzone",
+    selectStyle: "dd-select",
+    filter: false,
+    draggedTransperency: 0.5,
+    selection: [],
+    dragged: null,
+    activeDropZone: null,
+    activeZoneStyle: "actZone",
+    selectDraw: null,
+    mouseSelection: false,
+    hasDrop: false,
+    dragOffset: null,
+    startX: 0,
+    startY: 0,
+    newX: false,
+    newY: false
+  }
+};
+function start(task, dependencies, stateData, data) {
+  let { eFn } = dependencies;
+  document.addEventListener("mousedown", eFn.mouseDown);
+  document.addEventListener("mousemove", eFn.mouseMove);
+  document.addEventListener("mouseup", eFn.mouseUp);
+  document.addEventListener("dragstart", eFn.dragStart);
+  document.addEventListener("dragend", eFn.dragEnd);
+  document.addEventListener("dragover", eFn.dragOver);
+  document.addEventListener("dragenter", eFn.dragEnter);
+  document.addEventListener("drop", eFn.drop);
+  task.done({
+    success: true,
+    response: data
+  });
+}
+function startSelection(task, dependencies, stateData, data) {
+  const { event } = data, { fn: fn2 } = dependencies, { selectDraw } = stateData;
+  event.preventDefault();
+  stateData.selectDraw = fn2.drawSelection(event, selectDraw);
+  stateData.mouseSelection = true;
+  stateData.startX = event.clientX;
+  stateData.startY = event.clientY;
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function changeSelection(task, dependencies, stateData, data) {
+  let { mouseSelection, selectDraw, startX, startY } = stateData, { event } = data, { fn: fn2 } = dependencies;
+  if (!mouseSelection) {
+    task.done({ success: false });
+    return;
+  }
+  event.preventDefault();
+  let newX = event.clientX, newY = event.clientY;
+  fn2.updateSelection(fn2.minMax({ startX, startY, newX, newY }), selectDraw);
+  stateData.newX = newX;
+  stateData.newY = newY;
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function endSelection(task, dependencies, stateData, data) {
+  let { event } = data, { fn: fn2 } = dependencies, { startX, startY, newX, newY, selectDraw, selectStyle, filter } = stateData, selection = [], selectionType = "new";
+  event.preventDefault();
+  selectDraw.style.visibility = "hidden";
+  if (!newX) {
+    stateData.selection.forEach((el) => el.classList.remove(selectStyle));
+    stateData.selection = [];
+    task.done({
+      success: true,
+      stateData
+    });
+    return;
+  }
+  if (event.altKey)
+    selectionType = "reduce";
+  if (event.shiftKey)
+    selectionType = "expand";
+  if (selectionType !== "expand")
+    stateData.selection.forEach((el) => el.classList.remove(selectStyle));
+  let { xMin, xMax, yMin, yMax } = fn2.minMax({ startX, startY, newX, newY });
+  let dragNodes = document.querySelectorAll("[draggable]"), list = [];
+  if (filter) {
+    dragNodes.forEach((el) => {
+      if (el.classList.contains(filter))
+        list.push(el);
+    });
+  } else
+    dragNodes.forEach((el) => list.push(el));
+  list.forEach((el) => {
+    let check = true;
+    if (check)
+      check = el.offsetLeft > xMin;
+    if (check)
+      check = el.offsetTop > yMin;
+    if (check) {
+      let lastX = el.offsetLeft + el.clientWidth;
+      check = lastX < xMax;
+    }
+    if (check) {
+      let lastY = el.offsetTop + el.clientHeight;
+      check = lastY < yMax;
+    }
+    if (check)
+      selection.push(el);
+  });
+  switch (selectionType) {
+    case "new":
+      stateData.selection = selection.map((el) => {
+        el.classList.add(selectStyle);
+        return el;
+      });
+      break;
+    case "expand":
+      stateData.selection = selection.reduce((res, el) => {
+        if (!res.includes(el)) {
+          res.push(el);
+          el.classList.add(selectStyle);
+        }
+        return res;
+      }, stateData.selection);
+      break;
+    case "reduce":
+      stateData.selection = stateData.selection.reduce((res, el) => {
+        if (!selection.includes(el)) {
+          res.push(el);
+          el.classList.add(selectStyle);
+        }
+        return res;
+      }, []);
+      break;
+  }
+  stateData.mouseSelection = false;
+  stateData.newX = false;
+  stateData.newY = false;
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function addSingleItem(task, dependencies, stateData, data) {
+  let { event } = data, target = event.target, { selection, selectStyle, filter } = stateData, listHasTarget = selection.includes(target), validNode = true;
+  if (filter)
+    validNode = target.classList.contains(filter);
+  if (!listHasTarget && validNode) {
+    selection.push(target);
+    target.classList.add(selectStyle);
+  }
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function removeSingleItem(task, dependencies, stateData, data) {
+  let { event } = data, target = event.target, { selection, selectStyle } = stateData;
+  stateData.selection = selection.reduce((res, el) => {
+    if (el != target)
+      res.push(el);
+    else
+      el.classList.remove(selectStyle);
+    return res;
+  }, []);
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function replaceSelection(task, dependencies, stateData, data) {
+  let { event } = data, { selectStyle, filter } = stateData, target = event.target, validNode = true;
+  if (filter)
+    validNode = target.classList.contains(filter);
+  if (!validNode) {
+    task.done({ success: false });
+    return;
+  }
+  stateData.selection.forEach((el) => el.classList.remove(selectStyle));
+  target.classList.add(selectStyle);
+  stateData.selection = [target];
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function startDragging(task, dependencies, stateData, data) {
+  let { event } = data, { target } = event, { draggedTransperency, selection, selectStyle, dropStyle, filter, dependencies: deps } = stateData, { hooks: hooks2, fn: fn2 } = dependencies, validTarget = true;
+  if (filter)
+    validTarget = target.classList.contains(filter);
+  if (!validTarget) {
+    task.done({ success: false });
+    return;
+  }
+  if (selection.length === 0)
+    selection = [target];
+  hooks2.onStartDragging({ event, selection, draggedTransperency, selectStyle, dependencies: deps });
+  stateData.dragged = target;
+  stateData.dragOffset = {
+    x: event.offsetX,
+    y: event.offsetY
+  };
+  stateData.selection = selection;
+  stateData.activeDropZone = fn2.findDropZone(target, dropStyle);
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function changeDragZone(task, dependencies, stateData, data) {
+  let { event } = data, { fn: fn2 } = dependencies, {
+    activeDropZone: oldDropZone,
+    dragged,
+    activeZoneStyle,
+    dropStyle
+  } = stateData, actZone = false;
+  if (dragged.parentNode === event.target.parentNode) {
+    task.done({ success: true });
+    return;
+  }
+  actZone = fn2.findDropZone(event.target, dropStyle);
+  if (!actZone) {
+    task.done({ success: false });
+    return;
+  }
+  if (actZone) {
+    if (oldDropZone)
+      oldDropZone.classList.remove(activeZoneStyle);
+    actZone.classList.add(activeZoneStyle);
+    stateData.activeDropZone = actZone;
+    task.done({
+      success: true,
+      stateData
+    });
+    return;
+  }
+  task.done({ success: false });
+}
+function endDragging(task, dependencies, stateData, data) {
+  let { hooks: hooks2, fn: fn2 } = dependencies, {
+    activeDropZone,
+    activeZoneStyle,
+    dragged,
+    selection,
+    selectStyle,
+    hasDrop,
+    dependencies: deps
+  } = stateData, { event } = data, log = [];
+  if (!hasDrop) {
+    let dropZone = false;
+    selection.forEach((el) => {
+      let sourceList = fn2.targetList(el.parentNode), item = {
+        source: el.parentNode,
+        target: false,
+        el,
+        sourceList
+      };
+      log.push(item);
+    });
+    hooks2.onDropOut({ event, dropZone, dragged, selection, log, dependencies: deps });
+  }
+  activeDropZone.classList.remove(activeZoneStyle);
+  selection.forEach((el) => {
+    el.classList.remove(selectStyle);
+    el.style.opacity = "";
+    if (!el.style[0])
+      el.removeAttribute("style");
+  });
+  stateData.activeDropZone = null;
+  stateData.selection = [];
+  stateData.hasDrop = false;
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function drop(task, dependencies, stateData, data) {
+  let { event } = data, { activeDropZone, dragged, selection, dropStyle, dragOffset, dependencies: deps } = stateData, { hooks: hooks2, fn: fn2 } = dependencies, log = [], targetList2 = fn2.targetList(event.target), dropZone = fn2.findDropZone(event.target, dropStyle);
+  event.preventDefault();
+  if (dropZone == activeDropZone) {
+    selection.forEach((el) => {
+      let sourceList = fn2.targetList(el.parentNode), item = {
+        source: el.parentNode,
+        target: dropZone,
+        el,
+        targetList: targetList2,
+        sourceList
+      };
+      log.push(item);
+    });
+    hooks2.onDrop({ event, dropZone, dragged, selection, log, dragOffset, dependencies: deps });
+    stateData.hasDrop = true;
+  }
+  stateData.dragOffset = null;
+  task.done({
+    success: true,
+    stateData
+  });
+}
+function destroy(task, dependencies, stateData, data) {
+  let { eFn } = dependencies;
+  document.removeEventListener("mousedown", eFn.mouseDown);
+  document.removeEventListener("mousemove", eFn.mouseMove);
+  document.removeEventListener("mouseup", eFn.mouseUp);
+  document.removeEventListener("dragstart", eFn.dragStart);
+  document.removeEventListener("dragend", eFn.dragEnd);
+  document.removeEventListener("dragover", eFn.dragOver);
+  document.removeEventListener("dragenter", eFn.dragEnter);
+  document.removeEventListener("drop", eFn.drop);
+  task.done({ success: true });
+}
+function setConfig(task, dependencies, stateData, data = {}) {
+  let { hooks: hooks2, config } = data;
+  if (!hooks2)
+    hooks2 = {};
+  if (!config)
+    config = {};
+  if (config.onStartDragging)
+    hooks2.onStartDragging = config.onStartDragging;
+  if (config.onDrop)
+    hooks2.onDrop = config.onDrop;
+  if (config.onDropOut)
+    hooks2.onDropOut = config.onDropOut;
+  if (config.dropStyle && typeof config.dropStyle === "string")
+    stateData.dropStyle = config.dropStyle;
+  if (config.draggedTransperency && typeof config.draggedTransperency === "number")
+    stateData.draggedTransperency = config.draggedTransperency;
+  if (config.activeZoneStyle && typeof config.activeZoneStyle === "string")
+    stateData.activeZoneStyle = config.activeZoneStyle;
+  if (config.selectStyle && typeof config.selectStyle === "string")
+    stateData.selectStyle = config.selectStyle;
+  if (config.filter && typeof config.filter === "string")
+    stateData.filter = config.filter;
+  if (config.dependencies)
+    stateData.dependencies = config.dependencies;
+  else
+    stateData.dependencies = {};
+  task.done({
+    success: true,
+    stateData,
+    response: hooks2
+  });
+}
+function disable(task, dependencies, stateData, data) {
+  task.done({ success: true });
+}
+function enable(task, dependencies, stateData, data) {
+  task.don({ success: true });
+}
+const tranistions = {
+  start,
+  startSelection,
+  changeSelection,
+  endSelection,
+  addSingleItem,
+  removeSingleItem,
+  replaceSelection,
+  startDragging,
+  changeDragZone,
+  endDragging,
+  drop,
+  destroy,
+  setConfig,
+  disable,
+  enable
+};
+function dragDrop(config = {}) {
+  const dragMachine = new src(logic, tranistions), eFn = getEventFunctions(dragMachine, config.ignoreSelect), askForPromise2 = dragMachine.askForPromise;
+  dragMachine.setDependencies({ eFn, fn, askForPromise: askForPromise2 });
+  return dragMachine.update("start", { config, hooks }).then((hooks2) => dragMachine.setDependencies({ hooks: hooks2 })).then(() => ({
+    changeConfig: (config2) => {
+      dragMachine.update("changeConfig", { hooks, config: config2 }).then((hooks2) => dragMachine.setDependencies({ hooks: hooks2 }));
+    },
+    destroy: () => dragMachine.update("destroy"),
+    disable: () => dragMachine.update("disable"),
+    enable: () => dragMachine.update("enable")
+  }));
+}
+function yok() {
+  console.log("injected");
+}
+const cfg = {
+  ignoreSelect(e) {
+    const tg = e.target;
+    if (!tg.classList.contains("dropzone"))
+      return true;
+    else
+      return false;
+  },
+  onDropOut({ event, dropZone, dragged, selection, log, dragOffset, dependencies }) {
+    console.log("YES drop out");
+    dependencies.yok();
+  },
+  dependencies: {
+    yok
+  }
+};
+dragDrop(cfg);
+export { dragDrop as default };
