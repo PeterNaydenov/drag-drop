@@ -15,7 +15,7 @@ const
     , eFn         = getEventFunctions ( dragMachine, config.ignoreSelect )
     , askForPromise = dragMachine.askForPromise
     ;
-    // window.dd = dragMachine  // TODO: remove    
+    window.dd = dragMachine  // TODO: remove    
     dragMachine.setDependencies ({ eFn, fn, askForPromise })
     return dragMachine.update ( 'start', { config, hooks } )
                .then ( hooks => dragMachine.setDependencies ({ hooks })    )
