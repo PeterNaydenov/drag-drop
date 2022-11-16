@@ -5,10 +5,6 @@ function changeSelection ( task, dependencies, stateData, data ) {
         , { fn } = dependencies
         ;
 
-// console.log ( mouseSelection )
-// console.log ( selectDraw )
-// console.log ( stateData )
-
     if ( !mouseSelection ) {  
                     task.done ({ success: false })
                     return
