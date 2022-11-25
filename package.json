@@ -1,6 +1,6 @@
 {
     "name": "@peter.naydenov/drag-drop",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "Basic drag and drop module. Extendable by hooks",
     "keywords": [
         "drag",
