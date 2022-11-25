@@ -1,5 +1,5 @@
 function E(t) {
-  return t == null || typeof t == "boolean" ? "simple" : t instanceof Array ? "array" : typeof t == "object" ? "object" : "simple";
+  return t == null ? "simple" : t instanceof Array ? "array" : typeof t == "object" ? "object" : "simple";
 }
 function A(t, n) {
   return n instanceof Array ? !isNaN(t) : !1;
@@ -7,9 +7,9 @@ function A(t, n) {
 function w(t, n, e, i, r) {
   let [o, s] = i;
   Object.keys(t).forEach((c) => {
-    let d = E(t[c]), l = t[c], p = E(n) === "array", g = !isNaN(c);
+    let d = E(t[c]), l = t[c], p = E(n) === "array", g = !isNaN(c), h = Symbol("ignore___");
     if (d !== "simple" && s) {
-      if (l = s({ value: l, key: c, breadcrumbs: `${r}/${c}` }), l == null)
+      if (l = s({ value: l, key: c, breadcrumbs: `${r}/${c}`, IGNORE: h }), l === h)
         return;
       d = E(l);
     }
@@ -18,22 +18,22 @@ function w(t, n, e, i, r) {
         n[c] = l;
         return;
       }
-      let f = o({ value: l, key: c, breadcrumbs: `${r}/${c}` });
-      if (f == null)
+      let f = o({ value: l, key: c, breadcrumbs: `${r}/${c}`, IGNORE: h });
+      if (f === h)
         return;
       A(c, n) ? n.push(f) : n[c] = f;
     }
     if (d === "object") {
       const f = {};
-      p && g ? n.push(f) : n[c] = f, e.push(C(l, f, e, i, `${r}/${c}`));
+      p && g ? n.push(f) : n[c] = f, e.push(k(l, f, e, i, `${r}/${c}`));
     }
     if (d === "array") {
       const f = [];
-      p && g ? n.push(f) : n[c] = f, e.push(C(l, f, e, i, `${r}/${c}`));
+      p && g ? n.push(f) : n[c] = f, e.push(k(l, f, e, i, `${r}/${c}`));
     }
   });
 }
-function* C(t, n, e, i, r) {
+function* k(t, n, e, i, r) {
   yield w(t, n, e, i, r);
 }
 function P({ data: t, keyCallback: n, objectCallback: e }) {
@@ -57,17 +57,17 @@ function F() {
     let e = {}, i = {}, r = {};
     return t.forEach((o) => {
       const [s, a, c, d, l] = o, p = n[d], g = `${s}/${a}`;
-      e[g] = p || null, i[g] = c, Y(l) && (r[g] = [], r[g][0] = l[0], r[g][1] = l[1]);
+      e[g] = p || null, i[g] = c, I(l) && (r[g] = [], r[g][0] = l[0], r[g][1] = l[1]);
     }), { transitions: e, nextState: i, chainActions: r };
   };
 }
-function Y(t) {
+function I(t) {
   return !(t instanceof Array) || t.length != 2 ? !1 : (t.forEach((n) => {
     if (n !== !1 || typeof n != "string")
       return !1;
   }), !0);
 }
-function I(t) {
+function Y(t) {
   return function(n, e, i) {
     const r = t.askForPromise(), o = `${t.state}/${e}`, s = t.callback;
     t.lock = !0, t._transit(r, o, i), r.onComplete(
@@ -127,28 +127,28 @@ function z(t) {
     });
   };
 }
-function q(t) {
+function R(t) {
   return function(n) {
     t.dependencies = { ...t.dependencies, ...n };
   };
 }
-function B(t) {
+function q(t) {
   return function(n, e) {
     const i = t.callback;
     i[n] && i[n].push(e);
   };
 }
-function H(t) {
+function B(t) {
   return function(n) {
     !t.callback[n] || (t.callback[n] = []);
   };
 }
-function R(t) {
+function G(t) {
   return function({ state: n, stateData: e }) {
     n && (t.state = n, e && (t.stateData = { ...e }));
   };
 }
-function W(t) {
+function H(t) {
   return function() {
     const n = t.state, e = { ...t.stateData };
     return {
@@ -157,7 +157,7 @@ function W(t) {
     };
   };
 }
-function G(t) {
+function W(t) {
   return function(n, e) {
     const i = t.askForPromise();
     return t.lock ? (t.cache.push({ updateTask: i, action: n, dt: e }), i.promise) : (t._updateStep(i, n, e), i.onComplete((r) => t._onUpdateTask(r)), i.promise);
@@ -178,25 +178,25 @@ function Q(t) {
     return t.state;
   };
 }
-const Z = {
+const C = {
   _setTransitions: F,
-  _updateStep: I,
+  _updateStep: Y,
   _warn: X,
   _transit: j,
   _getChain: U,
   _triggerCacheUpdate: K,
   _onUpdateTask: z,
-  setDependencies: q,
-  on: B,
-  off: H,
-  importState: R,
-  exportState: W,
-  update: G,
+  setDependencies: R,
+  on: q,
+  off: B,
+  importState: G,
+  exportState: H,
+  update: W,
   reset: V,
   ignoreCachedUpdates: J,
   getState: Q
 };
-var _ = ee;
+var Z = ee;
 function ee(t) {
   let n = !1, e;
   return t ? (e = te(t), n = !0) : e = T(), e.timeout = ne(n, e), e;
@@ -233,17 +233,17 @@ function ne(t, n) {
     return e.then(() => clearTimeout(o)), n.onComplete = x(Promise.race([e, s])), n;
   };
 }
-const M = "N/A";
+const O = "N/A";
 function re({ init: t, table: n, stateData: e, debug: i }, r = {}) {
   const o = this;
-  o.state = t || M, o.initialState = t || M, o.lock = !1, o.cache = [], o.askForPromise = _, o.stateData = { ...e }, o.initialStateData = Object.freeze({ ...e }), o.dependencies = { walk: P, askForPromise: _ }, o.callback = {
+  o.state = t || O, o.initialState = t || O, o.lock = !1, o.cache = [], o.askForPromise = Z, o.stateData = { ...e }, o.initialStateData = Object.freeze({ ...e }), o.dependencies = { walk: P, askForPromise: Z }, o.callback = {
     update: [],
     transition: [],
     positive: [],
     negative: []
   };
-  for (let d in Z)
-    o[d] = Z[d](o);
+  for (let d in C)
+    o[d] = C[d](o);
   const { transitions: s, nextState: a, chainActions: c } = o._setTransitions(n, r);
   i && o._warn(s), o.transitions = s, o.nextState = a, o.chainActions = c;
 }
@@ -313,7 +313,7 @@ function le({ event: t, selection: n, draggedTransperency: e, selectStyle: i }) 
 function ue({ event: t, dropZone: n, dragged: e, selection: i, log: r, dragOffset: o }) {
   console.log("DROP OUT");
 }
-const O = {
+const M = {
   onDrop: de,
   onStartDragging: le,
   onDropOut: ue
@@ -386,7 +386,7 @@ function he(t, n, e, i) {
   });
 }
 function me(t, n, e, i) {
-  let { event: r } = i, { fn: o } = n, { startX: s, startY: a, newX: c, newY: d, selectDraw: l, selectStyle: p, filter: g } = e, f = [], h = "new";
+  let { event: r } = i, { fn: o } = n, { startX: s, startY: a, newX: c, newY: d, selectDraw: l, selectStyle: p, filter: g } = e, h = [], f = "new";
   if (r.preventDefault(), l.style.visibility = "hidden", !c) {
     e.selection.forEach((u) => u.classList.remove(p)), e.selection = [], t.done({
       success: !0,
@@ -394,22 +394,22 @@ function me(t, n, e, i) {
     });
     return;
   }
-  r.altKey && (h = "reduce"), r.shiftKey && (h = "expand"), h !== "expand" && e.selection.forEach((u) => u.classList.remove(p));
-  let { xMin: m, xMax: v, yMin: S, yMax: b } = o.minMax({ startX: s, startY: a, newX: c, newY: d }), k = document.querySelectorAll("[draggable]"), L = [];
-  switch (g ? k.forEach((u) => {
+  r.altKey && (f = "reduce"), r.shiftKey && (f = "expand"), f !== "expand" && e.selection.forEach((u) => u.classList.remove(p));
+  let { xMin: m, xMax: v, yMin: S, yMax: b } = o.minMax({ startX: s, startY: a, newX: c, newY: d }), _ = document.querySelectorAll("[draggable]"), L = [];
+  switch (g ? _.forEach((u) => {
     u.classList.contains(g) && L.push(u);
-  }) : k.forEach((u) => L.push(u)), L.forEach((u) => {
+  }) : _.forEach((u) => L.push(u)), L.forEach((u) => {
     let y = !0;
-    y && (y = u.offsetLeft > m), y && (y = u.offsetTop > S), y && (y = u.offsetLeft + u.clientWidth < v), y && (y = u.offsetTop + u.clientHeight < b), y && f.push(u);
-  }), h) {
+    y && (y = u.offsetLeft > m), y && (y = u.offsetTop > S), y && (y = u.offsetLeft + u.clientWidth < v), y && (y = u.offsetTop + u.clientHeight < b), y && h.push(u);
+  }), f) {
     case "new":
-      e.selection = f.map((u) => (u.classList.add(p), u));
+      e.selection = h.map((u) => (u.classList.add(p), u));
       break;
     case "expand":
-      e.selection = f.reduce((u, y) => (u.includes(y) || (u.push(y), y.classList.add(p)), u), e.selection);
+      e.selection = h.reduce((u, y) => (u.includes(y) || (u.push(y), y.classList.add(p)), u), e.selection);
       break;
     case "reduce":
-      e.selection = e.selection.reduce((u, y) => (f.includes(y) || (u.push(y), y.classList.add(p)), u), []);
+      e.selection = e.selection.reduce((u, y) => (h.includes(y) || (u.push(y), y.classList.add(p)), u), []);
       break;
   }
   e.mouseSelection = !1, e.newX = !1, e.newY = !1, t.done({
@@ -443,15 +443,15 @@ function be(t, n, e, i) {
   });
 }
 function Ee(t, n, e, i) {
-  let { event: r } = i, { target: o } = r, { draggedTransperency: s, selection: a, selectStyle: c, dropStyle: d, filter: l, dependencies: p } = e, { hooks: g, fn: f } = n, h = !0;
-  if (l && (h = o.classList.contains(l)), !h) {
+  let { event: r } = i, { target: o } = r, { draggedTransperency: s, selection: a, selectStyle: c, dropStyle: d, filter: l, dependencies: p } = e, { hooks: g, fn: h } = n, f = !0;
+  if (l && (f = o.classList.contains(l)), !f) {
     t.done({ success: !1 });
     return;
   }
   a.length === 0 && (a = [o]), g.onStartDragging({ event: r, selection: a, draggedTransperency: s, selectStyle: c, dependencies: p }), e.dragged = o, e.dragOffset = {
     x: r.offsetX,
     y: r.offsetY
-  }, e.selection = a, e.activeDropZone = f.findDropZone(o, d), t.done({
+  }, e.selection = a, e.activeDropZone = h.findDropZone(o, d), t.done({
     success: !0,
     stateData: e
   });
@@ -489,7 +489,7 @@ function we(t, n, e, i) {
     selectStyle: l,
     hasDrop: p,
     dependencies: g
-  } = e, { event: f } = i, h = [];
+  } = e, { event: h } = i, f = [];
   if (!p) {
     let m = !1;
     d.forEach((v) => {
@@ -499,8 +499,8 @@ function we(t, n, e, i) {
         el: v,
         sourceList: S
       };
-      h.push(b);
-    }), r.onDropOut({ event: f, dropZone: m, dragged: c, selection: d, log: h, dependencies: g });
+      f.push(b);
+    }), r.onDropOut({ event: h, dropZone: m, dragged: c, selection: d, log: f, dependencies: g });
   }
   s.classList.remove(a), d.forEach((m) => {
     m.classList.remove(l), m.style.opacity = "", m.style[0] || m.removeAttribute("style");
@@ -510,26 +510,26 @@ function we(t, n, e, i) {
   });
 }
 function xe(t, n, e, i) {
-  let { event: r } = i, { activeDropZone: o, dragged: s, selection: a, dropStyle: c, dragOffset: d, dependencies: l } = e, { hooks: p, fn: g } = n, f = [], h = g.targetList(r.target), m = g.findDropZone(r.target, c);
+  let { event: r } = i, { activeDropZone: o, dragged: s, selection: a, dropStyle: c, dragOffset: d, dependencies: l } = e, { hooks: p, fn: g } = n, h = [], f = g.targetList(r.target), m = g.findDropZone(r.target, c);
   r.preventDefault(), m == o && (a.forEach((v) => {
     let S = g.targetList(v.parentNode), b = {
       source: v.parentNode,
       target: m,
       el: v,
-      targetList: h,
+      targetList: f,
       sourceList: S
     };
-    f.push(b);
-  }), p.onDrop({ event: r, dropZone: m, dragged: s, selection: a, log: f, dragOffset: d, dependencies: l }), e.hasDrop = !0), e.dragOffset = null, t.done({
+    h.push(b);
+  }), p.onDrop({ event: r, dropZone: m, dragged: s, selection: a, log: h, dragOffset: d, dependencies: l }), e.hasDrop = !0), e.dragOffset = null, t.done({
     success: !0,
     stateData: e
   });
 }
-function ke(t, n, e, i) {
+function _e(t, n, e, i) {
   let { eFn: r } = n;
   document.removeEventListener("mousedown", r.mouseDown), document.removeEventListener("mousemove", r.mouseMove), document.removeEventListener("mouseup", r.mouseUp), document.removeEventListener("dragstart", r.dragStart), document.removeEventListener("dragend", r.dragEnd), document.removeEventListener("dragover", r.dragOver), document.removeEventListener("dragenter", r.dragEnter), document.removeEventListener("drop", r.drop), t.done({ success: !0 });
 }
-function Ce(t, n, e, i = {}) {
+function ke(t, n, e, i = {}) {
   let { hooks: r, config: o } = i;
   r || (r = {}), o || (o = {}), o.onStartDragging && (r.onStartDragging = o.onStartDragging), o.onDrop && (r.onDrop = o.onDrop), o.onDropOut && (r.onDropOut = o.onDropOut), o.dropStyle && typeof o.dropStyle == "string" && (e.dropStyle = o.dropStyle), o.draggedTransperency && typeof o.draggedTransperency == "number" && (e.draggedTransperency = o.draggedTransperency), o.activeZoneStyle && typeof o.activeZoneStyle == "string" && (e.activeZoneStyle = o.activeZoneStyle), o.selectStyle && typeof o.selectStyle == "string" && (e.selectStyle = o.selectStyle), o.filter && typeof o.filter == "string" && (e.filter = o.filter), o.dependencies ? e.dependencies = o.dependencies : e.dependencies = {}, t.done({
     success: !0,
@@ -537,13 +537,13 @@ function Ce(t, n, e, i = {}) {
     response: r
   });
 }
-function Ze(t, n, e, i) {
+function Ce(t, n, e, i) {
   t.done({ success: !0 });
 }
-function _e(t, n, e, i) {
+function Ze(t, n, e, i) {
   t.don({ success: !0 });
 }
-const Me = {
+const Oe = {
   start: ge,
   startSelection: ye,
   changeSelection: he,
@@ -555,16 +555,16 @@ const Me = {
   changeDragZone: Le,
   endDragging: we,
   drop: xe,
-  destroy: ke,
-  setConfig: Ce,
-  disable: Ze,
-  enable: _e
+  destroy: _e,
+  setConfig: ke,
+  disable: Ce,
+  enable: Ze
 };
-function Oe(t = {}) {
-  const n = new re(pe, Me), e = $(n, t.ignoreSelect), i = n.askForPromise;
-  return window.dd = n, n.setDependencies({ eFn: e, fn: ae, askForPromise: i }), n.update("start", { config: t, hooks: O }).then((r) => n.setDependencies({ hooks: r })).then(() => ({
+function Me(t = {}) {
+  const n = new re(pe, Oe), e = $(n, t.ignoreSelect), i = n.askForPromise;
+  return window.dd = n, n.setDependencies({ eFn: e, fn: ae, askForPromise: i }), n.update("start", { config: t, hooks: M }).then((r) => n.setDependencies({ hooks: r })).then(() => ({
     changeConfig: (r) => {
-      n.update("changeConfig", { hooks: O, config: r }).then((o) => n.setDependencies({ hooks: o }));
+      n.update("changeConfig", { hooks: M, config: r }).then((o) => n.setDependencies({ hooks: o }));
     },
     destroy: () => n.update("destroy"),
     disable: () => n.update("disable"),
@@ -585,7 +585,7 @@ const Ne = {
     yok: Te
   }
 };
-Oe(Ne);
+Me(Ne);
 export {
-  Oe as default
+  Me as default
 };
