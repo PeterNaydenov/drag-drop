@@ -175,6 +175,9 @@ Here is the list of methods provided in `drag-drop` api:
 
 ## Release History
 
+### 0.4.3 ( 2023-09-18 )
+- [x] Dependency update: @peter.naydenov/fsm v.5.1.0;
+
 ### 0.4.0 (2021-09-03)
 - [x] Config object was extended with 'dependencies'. The object will be injected and available to hook functions;
 
