@@ -1,5 +1,6 @@
-function setConfig ( task, dependencies, stateData, data={} ) {
+function setConfig ( {task}, data={} ) {
     let { hooks, config }= data;
+    let st = {}
 
     if ( !hooks )   hooks = {}
     if ( !config )   config = {}
@@ -8,18 +9,18 @@ function setConfig ( task, dependencies, stateData, data={} ) {
     if ( config.onDrop          )   hooks.onDrop          = config.onDrop
     if ( config.onDropOut       )   hooks.onDropOut       = config.onDropOut
 
-    if ( config.dropStyle       && (typeof config.dropStyle === 'string')               )   stateData.dropStyle           = config.dropStyle
-    if ( config.draggedTransperency && (typeof config.draggedTransperency === 'number') )   stateData.draggedTransperency = config.draggedTransperency
-    if ( config.activeZoneStyle && (typeof config.activeZoneStyle === 'string')         )   stateData.activeZoneStyle     = config.activeZoneStyle
-    if ( config.selectStyle     && (typeof config.selectStyle === 'string')             )   stateData.selectStyle         = config.selectStyle
-    if ( config.filter           && (typeof config.filter === 'string')                   )   stateData.filter               = config.filter
+    if ( config.dropStyle       && (typeof config.dropStyle === 'string')               )   st.dropStyle           = config.dropStyle
+    if ( config.draggedTransperency && (typeof config.draggedTransperency === 'number') )   st.draggedTransperency = config.draggedTransperency
+    if ( config.activeZoneStyle && (typeof config.activeZoneStyle === 'string')         )   st.activeZoneStyle     = config.activeZoneStyle
+    if ( config.selectStyle     && (typeof config.selectStyle === 'string')             )   st.selectStyle         = config.selectStyle
+    if ( config.filter           && (typeof config.filter === 'string')                   )   st.filter               = config.filter
     
-    if ( config.dependencies   )   stateData.dependencies = config.dependencies
-    else                          stateData.dependencies = {}
+    if ( config.dependencies   )   st.dependencies = config.dependencies
+    else                          st.dependencies = {}
 
     task.done ({ 
                   success : true 
-                , stateData
+                , stateData: st
                 , response : hooks
             })
 } // setConfig func.

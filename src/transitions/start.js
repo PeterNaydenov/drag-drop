@@ -1,4 +1,4 @@
-function start ( task, dependencies, stateData, data ) {
+function start ({ task, dependencies}, data ) {
     // *** Register all events needed
     let { eFn } = dependencies;
     

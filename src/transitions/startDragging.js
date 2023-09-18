@@ -1,10 +1,23 @@
-function startDragging ( task, dependencies, stateData, data ) {
+function startDragging ( {task, dependencies, extractList}, data ) {
         let 
               { event  } = data
             , { target } = event
-            , { draggedTransperency, selection, selectStyle, dropStyle, filter, dependencies:deps } = stateData
-            , { hooks, fn } = dependencies
+            , [ 
+                  draggedTransperency
+                , selection
+                , selectStyle
+                , dropStyle
+                , filter
+              ] = extractList ([
+                                  'draggedTransperency'
+                                , 'selection'
+                                , 'selectStyle'
+                                , 'dropStyle'
+                                , 'filter'
+                          ])
+            , { hooks, fn, deps } = dependencies
             , validTarget = true
+            , st = {}
             ;
 
         if ( filter )   validTarget = target.classList.contains ( filter )
@@ -16,16 +29,16 @@ function startDragging ( task, dependencies, stateData, data ) {
         if ( selection.length === 0 )   selection = [ target ]
         hooks.onStartDragging ({ event, selection, draggedTransperency, selectStyle, dependencies:deps })
 
-        stateData.dragged        = target
-        stateData.dragOffset     = { 
+        st.dragged        = target
+        st.dragOffset     = { 
                                          x : event.offsetX
                                         ,y : event.offsetY
                                     }
-        stateData.selection      = selection
-        stateData.activeDropZone = fn.findDropZone ( target, dropStyle )
+        st.selection      = selection
+        st.activeDropZone = fn.findDropZone ( target, dropStyle )
         task.done ({
                           success : true
-                        , stateData
+                        , stateData : st
                 })
 } // startDragging func.
 

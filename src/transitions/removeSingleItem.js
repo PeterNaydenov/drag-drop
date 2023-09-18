@@ -1,17 +1,17 @@
-function removeSingleItem ( task, dependencies, stateData, data ) {
+function removeSingleItem ( {task, extractList}, data ) {
         let 
               { event } = data
             , target = event.target
-            , { selection, selectStyle } = stateData
+            , [ selection, selectStyle ] = extractList ([ selection, selectStyle ])
             ;
-        stateData.selection = selection.reduce ( (res,el) => {
-                                                    if ( el != target )   res.push ( el )
-                                                    else    el.classList.remove ( selectStyle )
-                                                    return res
-                                            },[])
+        selection = selection.reduce ( (res,el) => {
+                                if ( el != target )   res.push ( el )
+                                else    el.classList.remove ( selectStyle )
+                                return res
+                        },[])
         task.done ({
                           success : true
-                        , stateData
+                        , stateData : { selection }
                 })
 } // removeSingleItem func.
 

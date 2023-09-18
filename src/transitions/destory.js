@@ -1,4 +1,4 @@
-function destroy ( task, dependencies, stateData, data ) {
+function destroy ({task, dependencies}) {
         let  { eFn } = dependencies;
         document.removeEventListener ( 'mousedown', eFn.mouseDown )
         document.removeEventListener ( 'mousemove', eFn.mouseMove )

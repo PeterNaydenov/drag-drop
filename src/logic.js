@@ -31,7 +31,7 @@ const table = [
 
 const logic = {
                    init : 'none'
-                 , table
+                 , behavior : table
                  , stateData : {
                                   dropStyle            : 'dropzone'   // CSS class name for drop zone
                                 , selectStyle          : 'dd-select'  // CSS class name for selected drag elements

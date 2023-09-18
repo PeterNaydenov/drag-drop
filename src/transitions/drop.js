@@ -1,11 +1,12 @@
-function drop ( task, dependencies, stateData, data ) {
+function drop ( {task, dependencies, extractList}, data ) {
     let 
           { event } = data
-        , { activeDropZone, dragged, selection, dropStyle, dragOffset, dependencies:deps } = stateData
-        , { hooks, fn } = dependencies
+        , [ activeDropZone, dragged, selection, dropStyle, dragOffset ] = extractList(['activeDropZone', 'dragged', 'selection', 'dropStyle', 'dragOffset'])
+        , { hooks, fn, deps } = dependencies
         , log   = []
         , targetList = fn.targetList ( event.target )
         , dropZone = fn.findDropZone ( event.target, dropStyle)
+        , hasDrop = false
         ;
     event.preventDefault ()
     if ( dropZone == activeDropZone ) {
@@ -23,13 +24,13 @@ function drop ( task, dependencies, stateData, data ) {
                               log.push ( item )
                       })
                 hooks.onDrop ({ event, dropZone, dragged, selection, log, dragOffset, dependencies:deps })
-                stateData.hasDrop = true
+                hasDrop = true
         }
     
-    stateData.dragOffset = null
+    dragOffset = null
     task.done ({
                       success : true
-                    , stateData
+                    , stateData : { hasDrop, dragOffset }
             })
 } // drop func.
 

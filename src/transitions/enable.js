@@ -1,4 +1,4 @@
-function enable ( task, dependencies, stateData, data ) {
+function enable ( {task}) {
     task.don ({ success : true })
 } // enable func.
 

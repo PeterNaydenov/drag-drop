@@ -1,15 +1,21 @@
-function changeDragZone ( task, dependencies, stateData, data ) {
+function changeDragZone ( {task, dependencies, extractList}, data ) {
     let 
           { event } = data
         , { fn    } = dependencies
-        , { 
-              activeDropZone : oldDropZone
+        , [
+              oldDropZone
             , dragged
             , activeZoneStyle
             , dropStyle 
-            } = stateData
+          ] = extractList ([
+                              'activeDropZone'
+                            , 'dragged'
+                            , 'activeZoneStyle'
+                            , 'dropStyle' 
+            ])
         , actZone = false
         ;
+        
     if ( dragged.parentNode === event.target.parentNode ) {  
                         task.done ({ success : true })                    
                         return
@@ -22,10 +28,11 @@ function changeDragZone ( task, dependencies, stateData, data ) {
     if ( actZone ) {
                     if ( oldDropZone )   oldDropZone.classList.remove ( activeZoneStyle )
                     actZone.classList.add ( activeZoneStyle )
-                    stateData.activeDropZone = actZone
                     task.done ({
                                   success : true
-                                , stateData
+                                , stateData : {
+                                                    activeDropZone : actZone
+                                            }
                             })
                     return
         }

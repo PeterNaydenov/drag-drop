@@ -1,7 +1,7 @@
-function replaceSelection ( task, dependencies, stateData, data ) {
+function replaceSelection ( { task, extractList}, data ) {
         let 
               { event } = data
-            , { selectStyle, filter } = stateData
+            , [ selectStyle, filter ] = extractList ([ 'selectStyle', 'filter' ])
             , target = event.target
             , validNode = true
             ;
@@ -12,12 +12,12 @@ function replaceSelection ( task, dependencies, stateData, data ) {
                     return
             }
             
-        stateData.selection.forEach ( el => el.classList.remove ( selectStyle ) )
+        selection.forEach ( el => el.classList.remove ( selectStyle ) )
         target.classList.add ( selectStyle )
-        stateData.selection = [ target ]
+        selection = [ target ]
         task.done ({
                           success : true
-                        , stateData
+                        , stateData : { selection }
                 })
 } // replaceSelection func.
 

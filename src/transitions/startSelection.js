@@ -1,18 +1,19 @@
-function startSelection ( task, dependencies, stateData, data ) {
+function startSelection ({ task, dependencies, extractList}, data ) {
     const 
           { event } = data
         , { fn    } = dependencies
-        , { selectDraw } = stateData
+        , [ selectDraw ] = extractList ([ 'selectDraw' ])
+        , st = {}
         ;
     event.preventDefault ()
-    stateData.selectDraw = fn.drawSelection ( event, selectDraw )
-    stateData.mouseSelection = true
-    stateData.startX = event.clientX
-    stateData.startY = event.clientY
+    st.selectDraw = fn.drawSelection ( event, selectDraw )
+    st.mouseSelection = true
+    st.startX = event.clientX
+    st.startY = event.clientY
 
     task.done ({
                       success : true
-                    , stateData
+                    , stateData : st
                 })
 } // startSelection func.
 

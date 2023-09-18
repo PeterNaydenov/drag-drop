@@ -1,15 +1,22 @@
-function endDragging ( task, dependencies, stateData, data ) {
+function endDragging ( {task, dependencies, extractList}, data ) {
     let
-          { hooks, fn } = dependencies
-        , { 
-              activeDropZone
-            , activeZoneStyle
-            , dragged
-            , selection
-            , selectStyle
-            , hasDrop
-            , dependencies: deps
-          } = stateData
+          { hooks, fn, deps } = dependencies
+        , [
+                activeDropZone
+              , activeZoneStyle
+              , dragged
+              , selection
+              , selectStyle
+              , hasDrop
+          ] = extractList ([
+                                  'activeDropZone'
+                                , 'activeZoneStyle'
+                                , 'dragged'
+                                , 'selection'
+                                , 'selectStyle'
+                                , 'hasDrop'
+                                , 'dependencies'
+                      ])
         , { event } = data 
         , log = []
         ;
@@ -37,13 +44,13 @@ function endDragging ( task, dependencies, stateData, data ) {
                             if ( !el.style[0] )   el.removeAttribute ( 'style' )
                 })
 
-    stateData.activeDropZone = null
-    stateData.selection      = []
-    stateData.hasDrop        = false
+    activeDropZone = null
+    selection      = []
+    hasDrop        = false
     
     task.done ({ 
                       success : true
-                    , stateData
+                    , stateData : { activeDropZone, selection, hasDrop }
             })
 } // endDragging func.
 

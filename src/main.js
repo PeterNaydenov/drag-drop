@@ -6,17 +6,18 @@ import fn from './fn/index'                           // Helper functions;
 import hooks from './hooks/index'                     // Hook functions;
 import logic from './logic'                           // Fsm logic and state vars;
 import transitions from './transitions/index'         // Fsm transition library
-import getEventFunctions from './fn/onEvent';    // Functions registered on events
+import getEventFunctions from './fn/onEvent';         // Functions registered on events
 
 
 function dragDrop ( config={} ) {
 const 
       dragMachine = new Fsm ( logic, transitions )
     , eFn         = getEventFunctions ( dragMachine, config.ignoreSelect )
-    , askForPromise = dragMachine.askForPromise
     ;
-    window.dd = dragMachine  // TODO: remove    
-    dragMachine.setDependencies ({ eFn, fn, askForPromise })
+    window.dd = dragMachine  // TODO: remove 
+
+    dragMachine.setDependencies ({ 'deps': config.dependencies })    
+    dragMachine.setDependencies ({ eFn, fn })
     return dragMachine.update ( 'start', { config, hooks } )
                .then ( hooks => dragMachine.setDependencies ({ hooks })    )
                .then ( () => ({

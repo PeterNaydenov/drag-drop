@@ -1,8 +1,24 @@
-function endSelection ( task, dependencies, stateData, data ) {
+function endSelection ({task, dependencies, extractList}, data ) {
     let 
           { event } = data
         , { fn    } = dependencies
-        , { startX, startY, newX, newY, selectDraw, selectStyle, filter } = stateData
+        , [ 
+              startX
+            , startY
+            , newX
+            , newY
+            , selectDraw
+            , selectStyle
+            , filter 
+                ] = extractList ([
+                                 'startX'
+                                ,'startY'
+                                ,'newX'
+                                ,'newY'
+                                ,'selectDraw'
+                                ,'selectStyle'
+                                ,'filter'
+                            ])
         , selection = []
         , selectionType = 'new'   // Types: new | expand | reduce 
         ;
@@ -10,18 +26,18 @@ function endSelection ( task, dependencies, stateData, data ) {
         selectDraw.style.visibility = 'hidden'
 
         if ( !newX ) {   // No selection ( newX == false )
-                        stateData.selection.forEach ( el => el.classList.remove ( selectStyle )   )
-                        stateData.selection = []
+                        selection.forEach ( el => el.classList.remove ( selectStyle )   )
+                        selection = []
                         task.done ({
                                        success : true
-                                     , stateData
+                                     , stateData : { selection }
                                 })
                         return
                 } // !newX
         
         if ( event.altKey               )   selectionType = 'reduce'
         if ( event.shiftKey             )   selectionType = 'expand'
-        if ( selectionType !== 'expand' )   stateData.selection.forEach ( el => el.classList.remove ( selectStyle )   )
+        if ( selectionType !== 'expand' )   selection.forEach ( el => el.classList.remove ( selectStyle )   )
         
         let { xMin, xMax, yMin, yMax } = fn.minMax ({ startX, startY, newX, newY })
         
@@ -56,22 +72,22 @@ function endSelection ( task, dependencies, stateData, data ) {
         
         switch ( selectionType ) {
                 case 'new' :
-                            stateData.selection = selection.map ( el => {
+                            selection = selection.map ( el => {
                                                             el.classList.add (selectStyle)  
                                                             return el
                                                         })
                             break
                 case 'expand':
-                            stateData.selection = selection.reduce ((res,el) => {
+                            selection = selection.reduce ((res,el) => {
                                                                     if ( !res.includes(el) ) {  
                                                                                     res.push ( el )
                                                                                     el.classList.add ( selectStyle )
                                                                         }
                                                                     return res
-                                                            } , stateData.selection )
+                                                            } , selection )
                             break
                 case 'reduce':
-                            stateData.selection = stateData.selection.reduce ( (res,el) => {
+                            selection = selection.reduce ( (res,el) => {
                                                                     if ( !selection.includes(el) ) {  
                                                                                     res.push ( el )
                                                                                     el.classList.add ( selectStyle )
@@ -81,13 +97,13 @@ function endSelection ( task, dependencies, stateData, data ) {
                             break
             } // switch selectionType
 
-        stateData.mouseSelection = false
-        stateData.newX   = false
-        stateData.newY   = false
+        mouseSelection = false
+        newX   = false
+        newY   = false
 
         task.done ({
                           success : true
-                        , stateData
+                        , stateData : { selection, mouseSelection, newX, newY }
                 })
 } // endSelection func.
 

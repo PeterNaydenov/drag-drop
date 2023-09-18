@@ -1,6 +1,6 @@
-function changeSelection ( task, dependencies, stateData, data ) {
+function changeSelection ({task, dependencies, extractList}, data ) {
     let
-          { mouseSelection, selectDraw, startX, startY } = stateData
+          { mouseSelection, selectDraw, startX, startY } = extractList(['mouseSelection', 'selectDraw', 'startX', 'startY'])
         , { event } = data
         , { fn } = dependencies
         ;
@@ -17,12 +17,9 @@ function changeSelection ( task, dependencies, stateData, data ) {
       ;
 
     fn.updateSelection ( fn.minMax({startX,startY,newX,newY}), selectDraw )
-
-    stateData.newX = newX
-    stateData.newY = newY
     task.done ({
                       success : true
-                    , stateData
+                    , stateData : { newX, newY }
             })
 
 } // changeSelection func.
