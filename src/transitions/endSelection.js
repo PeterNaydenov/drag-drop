@@ -3,7 +3,8 @@ function endSelection ({task, dependencies, extractList}, data ) {
           { event } = data
         , { fn    } = dependencies
         , [ 
-              startX
+              prevSelection
+            , startX
             , startY
             , newX
             , newY
@@ -11,7 +12,8 @@ function endSelection ({task, dependencies, extractList}, data ) {
             , selectStyle
             , filter 
                 ] = extractList ([
-                                 'startX'
+                                  'selection'
+                                , 'startX'
                                 ,'startY'
                                 ,'newX'
                                 ,'newY'
@@ -19,14 +21,15 @@ function endSelection ({task, dependencies, extractList}, data ) {
                                 ,'selectStyle'
                                 ,'filter'
                             ])
-        , selection = []
         , selectionType = 'new'   // Types: new | expand | reduce 
+        , selection = []
         ;
+
         event.preventDefault ()
         selectDraw.style.visibility = 'hidden'
 
         if ( !newX ) {   // No selection ( newX == false )
-                        selection.forEach ( el => el.classList.remove ( selectStyle )   )
+                        prevSelection.forEach ( el => el.classList.remove ( selectStyle )   )
                         selection = []
                         task.done ({
                                        success : true
@@ -37,7 +40,9 @@ function endSelection ({task, dependencies, extractList}, data ) {
         
         if ( event.altKey               )   selectionType = 'reduce'
         if ( event.shiftKey             )   selectionType = 'expand'
-        if ( selectionType !== 'expand' )   selection.forEach ( el => el.classList.remove ( selectStyle )   )
+        if ( selectionType !== 'expand' )   prevSelection.forEach ( el => {
+                                                            el.classList.remove ( selectStyle )
+                                                    })
         
         let { xMin, xMax, yMin, yMax } = fn.minMax ({ startX, startY, newX, newY })
         
@@ -97,7 +102,7 @@ function endSelection ({task, dependencies, extractList}, data ) {
                             break
             } // switch selectionType
 
-        mouseSelection = false
+        const mouseSelection = false;
         newX   = false
         newY   = false
 

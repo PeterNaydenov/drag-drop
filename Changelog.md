@@ -1,10 +1,25 @@
 ## Release History
 
+### 0.4.4 ( 2023-10-30)
+Fixes for bugs introduced with change of the fsm library version in 0.4.3:
+- [x] Fix: Visual selection marker is fixed size square;
+- [x] Fix: Selection stays if new selection is empty;
+- [x] Fix: Dropzone marker breaks;
+
+
+
 ### 0.4.3 ( 2023-09-18 )
 - [x] Dependency update: @peter.naydenov/fsm v.5.1.0;
+- [ ] Bug: Visual selection marker is fixed size square;
+- [ ] Bug: Selection stays if new selection is empty;
+- [ ] Bug: Dropzone marker breaks;
+
+
 
 ### 0.4.0 (2021-09-03)
 - [x] Config object was extended with 'dependencies'. The object will be injected and available to hook functions;
+
+
 
 ### 0.3.3 (2021-08-18)
 - [x] Fix: Hook 'onDropOut' doesn't work;

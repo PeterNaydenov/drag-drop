@@ -37,7 +37,7 @@ function endDragging ( {task, dependencies, extractList}, data ) {
                     })
               hooks.onDropOut ({event, dropZone, dragged, selection, log, dependencies:deps })
         }
-    activeDropZone.classList.remove ( activeZoneStyle )
+    if ( activeDropZone )   activeDropZone.classList.remove ( activeZoneStyle )
     selection.forEach ( el => {
                             el.classList.remove ( selectStyle )
                             el.style.opacity = ''
