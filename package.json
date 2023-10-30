@@ -1,31 +1,29 @@
 {
     "name": "@peter.naydenov/drag-drop",
     "description": "Basic drag and drop module. Extendable by hooks",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "license": "MIT",
     "author": "Peter Naydenov",
     "homepage": "https://github.com/PeterNaydenov/drag-drop",
-    "bugs": { "url": "https://github.com/PeterNaydenov/drag-drop/issues"  },
+    "bugs": {
+        "url": "https://github.com/PeterNaydenov/drag-drop/issues"
+    },
     "scripts": {
-            "dev": "vite",
-            "build": "vite build",
-            "serve": "vite preview"
-        },
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview"
+    },
     "dependencies": {
-            "@peter.naydenov/fsm": "5.1.2"
-        },
+        "@peter.naydenov/fsm": "5.1.2"
+    },
     "devDependencies": {
-            "vite": "4.5.0"
-        },
-        
-    
-
+        "vite": "4.5.0"
+    },
     "main": "src/main.js",
     "repository": {
-                "type": "git",
-                "url": "git+https://github.com/PeterNaydenov/drag-drop"
-            },
-    
+        "type": "git",
+        "url": "git+https://github.com/PeterNaydenov/drag-drop"
+    },
     "keywords": [
         "drag",
         "drop"
