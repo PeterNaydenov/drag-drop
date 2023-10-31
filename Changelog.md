@@ -1,10 +1,14 @@
 ## Release History
 
+### 0.4.5 ( 2023-10-31)
+- [x] Fix: Build is up to date;
+
 ### 0.4.4 ( 2023-10-30)
 Fixes for bugs introduced with change of the fsm library version in 0.4.3:
 - [x] Fix: Visual selection marker is fixed size square;
 - [x] Fix: Selection stays if new selection is empty;
 - [x] Fix: Dropzone marker breaks;
+- [ ] Bug: Build is not up to date;
 
 
 
