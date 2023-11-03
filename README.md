@@ -3,6 +3,7 @@
 
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/drag-drop)
 ![license](https://img.shields.io/github/license/peterNaydenov/drag-drop)
+![GitHub issues](https://img.shields.io/github/issues-raw/peterNaydenov/drag-drop)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40peter.naydenov%2Fdrag-drop)
 
 Platform independent "drag and drop" module. It's a try to simplify and automate `drag and drop` functionality as it possible.
