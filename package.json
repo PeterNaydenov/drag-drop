@@ -4,22 +4,36 @@
     "version": "0.4.5",
     "license": "MIT",
     "author": "Peter Naydenov",
+    "main": "./dist/drag-drop.esm.mjs",
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/drag-drop.esm.mjs",
+            "default": "./dist/drag-drop.esm.mjs"
+        },
+        "./package.json": "./package.json",
+        "./dist/*": "./dist/*",
+        "./src/*": "./src/*"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "rollup -c",
+        "serve": "vite preview"
+    },
+    "dependencies": {
+        "@peter.naydenov/fsm": "^5.2.0"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^28.0.1",
+        "@rollup/plugin-node-resolve": "^15.3.0",
+        "@rollup/plugin-terser": "^0.4.4",
+        "rollup": "^4.28.0",
+        "vite": "6.0.2"
+    },
     "homepage": "https://github.com/PeterNaydenov/drag-drop",
     "bugs": {
         "url": "https://github.com/PeterNaydenov/drag-drop/issues"
     },
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "serve": "vite preview"
-    },
-    "dependencies": {
-        "@peter.naydenov/fsm": "5.1.2"
-    },
-    "devDependencies": {
-        "vite": "5.0.10"
-    },
-    "main": "src/main.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/PeterNaydenov/drag-drop"

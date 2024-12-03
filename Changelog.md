@@ -1,7 +1,19 @@
 ## Release History
 
+
+
+### 0.4.6 ( 2023-12-03)
+- [x] Update build up configuration(rollup.config.js);
+- [x] Dependency update: @peter.naydenov/fsm v.5.2.0;
+- [x] Dev dependencies update;
+- [x] No code changes at all;
+
+
+
 ### 0.4.5 ( 2023-10-31)
 - [x] Fix: Build is up to date;
+
+
 
 ### 0.4.4 ( 2023-10-30)
 Fixes for bugs introduced with change of the fsm library version in 0.4.3:

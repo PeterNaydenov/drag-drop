@@ -9,15 +9,18 @@ import transitions from './transitions/index'         // Fsm transition library
 import getEventFunctions from './fn/onEvent';         // Functions registered on events
 
 
+
 function dragDrop ( config={} ) {
 const 
       dragMachine = new Fsm ( logic, transitions )
     , eFn         = getEventFunctions ( dragMachine, config.ignoreSelect )
     ;
+    
     window.dd = dragMachine  // TODO: remove 
 
     dragMachine.setDependencies ({ 'deps': config.dependencies })    
     dragMachine.setDependencies ({ eFn, fn })
+    
     return dragMachine.update ( 'start', { config, hooks } )
                .then ( hooks => dragMachine.setDependencies ({ hooks })    )
                .then ( () => ({

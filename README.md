@@ -40,34 +40,6 @@ dragDrop ();
 
 
 
-### UMD Module
-
-Find the **UMD** module in "`/dist`" folder - */dist/drag-drop.umd.js*. Add link to your HTML code. Function `dragDrop()` is available as global variable.
-```html
-  <script src="/dist/drag-drop.umd.js"></script>
-  <script>
-      dragDrop ()
-  </script>
-```
-
-
-
-### ES Module
-Find the **ES** module in "`/dist`" folder - */dist/drag-drop.es.js*.  Add a script tag, import the module and use it.
-```html
-<script>
-      import dragDrop from '/dist/drag-drop.es.js'
-      dragDrop ()
-</script>
-```
-
-
-
-
-
-
-
-
 
 
 ## How to use it
