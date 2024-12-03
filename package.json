@@ -1,7 +1,7 @@
 {
     "name": "@peter.naydenov/drag-drop",
     "description": "Basic drag and drop module. Extendable by hooks",
-    "version": "0.4.5",
+    "version": "0.4.6",
     "license": "MIT",
     "author": "Peter Naydenov",
     "main": "./dist/drag-drop.esm.mjs",
