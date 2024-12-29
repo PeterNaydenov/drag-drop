@@ -4,12 +4,12 @@
     "version": "0.4.6",
     "license": "MIT",
     "author": "Peter Naydenov",
-    "main": "./dist/drag-drop.esm.mjs",
+    "main": "./src/main.js",
     "type": "module",
     "exports": {
         ".": {
-            "import": "./dist/drag-drop.esm.mjs",
-            "default": "./dist/drag-drop.esm.mjs"
+            "import": "./src/main.js",
+            "default": "./src/main.js"
         },
         "./package.json": "./package.json",
         "./dist/*": "./dist/*",
@@ -21,7 +21,7 @@
         "serve": "vite preview"
     },
     "dependencies": {
-        "@peter.naydenov/fsm": "^5.2.0"
+        "@peter.naydenov/fsm": "^5.2.2"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^28.0.2",
