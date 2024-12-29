@@ -2,7 +2,12 @@
 
 
 
-### 0.4.6 ( 2023-12-03)
+### 0.4.7 ( 2024-12-29)
+- [x] Dependency update: @peter.naydenov/fsm v.5.2.2;
+
+
+
+### 0.4.6 ( 2024-12-03)
 - [x] Update build up configuration(rollup.config.js);
 - [x] Dependency update: @peter.naydenov/fsm v.5.2.0;
 - [x] Dev dependencies update;
