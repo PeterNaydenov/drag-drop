@@ -1,6 +1,10 @@
 ## Release History
 
 
+### 0.4.8 ( 2025-02-22)
+- [x] Dependency update: @peter.naydenov/fsm v.5.2.3;
+
+
 
 ### 0.4.7 ( 2024-12-29)
 - [x] Dependency update: @peter.naydenov/fsm v.5.2.2;
