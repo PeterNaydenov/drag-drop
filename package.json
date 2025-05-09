@@ -27,7 +27,7 @@
         "@rollup/plugin-commonjs": "^28.0.3",
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-terser": "^0.4.4",
-        "rollup": "^4.40.0",
+        "rollup": "^4.40.2",
         "vite": "6.3.5"
     },
     "homepage": "https://github.com/PeterNaydenov/drag-drop",
