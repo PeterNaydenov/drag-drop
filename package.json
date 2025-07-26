@@ -28,7 +28,7 @@
         "@rollup/plugin-node-resolve": "^16.0.1",
         "@rollup/plugin-terser": "^0.4.4",
         "rollup": "^4.45.1",
-        "vite": "6.3.5"
+        "vite": "7.0.5"
     },
     "homepage": "https://github.com/PeterNaydenov/drag-drop",
     "bugs": {
