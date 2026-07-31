@@ -1,8 +1,14 @@
 ## Release History
 
 
+### 0.4.11 ( 2027-08-01)
+- [x] Fix: Build is up to date;
+
+
+
 ### 0.4.10 ( 2027-07-31)
 - [x] Dependency update: @peter.naydenov/fsm v.5.2.7;
+- [ ] Note: No new build;
 
 
 
