@@ -2,7 +2,7 @@
 function targetList ( container ) {
     return function targetList () {
             let 
-                  list = document.querySelectorAll ( '[draggable]' )
+                  list = document.querySelectorAll ( '[draggable="true"]' )
                 , selection = []
                 ;
             list.forEach ( el => {
