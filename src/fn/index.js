@@ -3,6 +3,7 @@ import updateSelection from './updateSelection'
 import drawSelection   from './drawSelection'
 import targetList      from './targetList'
 import findDropZone     from './findDropZone'
+import getDraggable    from './getDraggable'
 
 import getEventFunctions from './onEvent'
 
@@ -13,6 +14,7 @@ const fn = {
                 , drawSelection
                 , targetList
                 , findDropZone
+                , getDraggable
 
                 , getEventFunctions
             }
