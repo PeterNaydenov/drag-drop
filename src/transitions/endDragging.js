@@ -8,6 +8,7 @@ function endDragging ( {task, dependencies, extractList}, data ) {
               , selection
               , selectStyle
               , hasDrop
+              , dragOffset
           ] = extractList ([
                                   'activeDropZone'
                                 , 'activeZoneStyle'
@@ -15,7 +16,7 @@ function endDragging ( {task, dependencies, extractList}, data ) {
                                 , 'selection'
                                 , 'selectStyle'
                                 , 'hasDrop'
-                                , 'dependencies'
+                                , 'dragOffset'
                       ])
         , { event } = data 
         , log = []
@@ -35,7 +36,7 @@ function endDragging ( {task, dependencies, extractList}, data ) {
                               ;
                             log.push ( item )
                     })
-              hooks.onDropOut ({event, dropZone, dragged, selection, log, dependencies:deps })
+              hooks.onDropOut ({event, dropZone, dragged, selection, log, dragOffset, dependencies:deps })
         }
     if ( activeDropZone )   activeDropZone.classList.remove ( activeZoneStyle )
     selection.forEach ( el => {
@@ -50,7 +51,7 @@ function endDragging ( {task, dependencies, extractList}, data ) {
     
     task.done ({ 
                       success : true
-                    , stateData : { activeDropZone, selection, hasDrop }
+                    , stateData : { activeDropZone, selection, hasDrop, dragged: null, dragOffset: null }
             })
 } // endDragging func.
 
