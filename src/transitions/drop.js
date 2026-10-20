@@ -4,12 +4,12 @@ function drop ( {task, dependencies, extractList}, data ) {
         , [ activeDropZone, dragged, selection, dropStyle, dragOffset ] = extractList(['activeDropZone', 'dragged', 'selection', 'dropStyle', 'dragOffset'])
         , { hooks, fn, deps } = dependencies
         , log   = []
-        , targetList = fn.targetList ( event.target )
         , dropZone = fn.findDropZone ( event.target, dropStyle)
+        , targetList = fn.targetList ( dropZone )   // event.target could be an element inside the drop zone
         , hasDrop = false
         ;
     event.preventDefault ()
-    if ( dropZone == activeDropZone ) {
+    if ( dropZone && dropZone == activeDropZone ) {   // No drop zone -> 'endDragging' calls 'onDropOut'
                 selection.forEach ( el => {
                               let 
                                   sourceList = fn.targetList ( el.parentNode )
@@ -27,10 +27,9 @@ function drop ( {task, dependencies, extractList}, data ) {
                 hasDrop = true
         }
     
-    dragOffset = null
-    task.done ({
+    task.done ({   // 'dragOffset' is reset by 'endDragging'
                       success : true
-                    , stateData : { hasDrop, dragOffset }
+                    , stateData : { hasDrop }
             })
 } // drop func.
 
