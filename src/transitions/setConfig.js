@@ -13,6 +13,8 @@ function setConfig ( {task}, data={} ) {
     if ( typeof config.draggedTransperency === 'number'                                )   st.draggedTransperency = config.draggedTransperency
     if ( config.activeZoneStyle && (typeof config.activeZoneStyle === 'string')         )   st.activeZoneStyle     = config.activeZoneStyle
     if ( config.selectStyle     && (typeof config.selectStyle === 'string')             )   st.selectStyle         = config.selectStyle
+    if ( [ false, 'placeholder', 'line' ].includes ( config.reorder )                    )   st.reorder             = config.reorder
+    if ( config.placeholderStyle && (typeof config.placeholderStyle === 'string')       )   st.placeholderStyle    = config.placeholderStyle
     if ( config.filter           && (typeof config.filter === 'string')                   )   st.filter               = config.filter
 
     task.done ({ 
