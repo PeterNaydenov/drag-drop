@@ -77,11 +77,54 @@ Here is the configuration keys available and their default values. For keys that
 , draggedTransperency  : 0.5          // Transperency of dragged DOM element
 , activeZoneStyle      : 'actZone'    // Active drop zone style name.
 , selectStyle          : 'dd-select'  // CSS class name for selected drag elements
+, reorder              : false        // Show where dropped items will be inserted. Values: false | 'placeholder' | 'line'. Available after version 0.6.0
+, placeholderStyle     : 'dd-placeholder' // CSS class name for the drop position indicator. Available after version 0.6.0
 , dependencies         : {} // Object will be available as prop in the hook functions. Available after version 0.4.0
 
 , onStartDragging : f   // A hook. [function]
 , onDrop          : f   // A hook. [function]
+, onDropOut       : f   // A hook. [function]
 , ignoreSelect    : f   // Control places where you can start dragging a selection.
+```
+
+
+
+
+
+
+
+
+
+## Reorder
+By default dropped items are appended at the end of the drop zone. Set `reorder` to place them among the drag nodes of the drop zone. While dragging over a drop zone, an indicator shows the drop position:
+
+- `'placeholder'` - An empty element opens a gap where the items will land. The placeholder has the same tag name and size as the dragged element;
+- `'line'` - A thin line between the drag nodes. Nothing in the drop zone moves;
+
+The indicator has only the CSS class from `placeholderStyle`. Its look is up to you:
+
+```css
+.dd-placeholder {   /* reorder: 'placeholder' */
+        background-color: rgba(30, 144, 255, .15);
+        outline: 2px dashed dodgerblue;
+    }
+.dd-line {          /* reorder: 'line', placeholderStyle: 'dd-line' */
+        background-color: dodgerblue;
+    }
+```
+
+```js
+dragDrop ({ reorder: 'line', placeholderStyle: 'dd-line' })
+```
+
+Vertical lists, horizontal lists and wrapping grids are supported. The layout is detected from the positions of the drag nodes. Only direct children of the drop zone with `draggable="true"` are used as positions.
+
+Hook `onDrop` receives the drop position as `before` - the node that the dropped items should be inserted before. `null` means append. `before` is always `null` when `reorder` is `false`:
+
+```js
+function onDrop ({ dropZone, before, selection }) {
+        selection.forEach ( el => dropZone.insertBefore ( el, before ))
+    }
 ```
 
 
@@ -142,7 +185,10 @@ Here is the list of methods provided in `drag-drop` api:
 1. **Can I create custom drag object**?
     - Yes. Take a look at hook `onStartDragging`. Event argument contains property `dataTransfer`. By using `event.dataTransfer.setData ()` you can set your drag object to whatever you want. For more information you can read [the official documentation](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/setData);
 
-2. **Is it possible to drag multiple items**?
+2. **Can I reorder items in a list**?
+    - Yes. Set config `reorder` to `'placeholder'` or `'line'`. See section [Reorder](#reorder);
+
+3. **Is it possible to drag multiple items**?
     - Yes. With module `drag-drop` is possible to select multiple items from different containers. Drag a already selected item will keep the selection available during `drop` event. The hook `onDrop` will take care of the result of `drag and drop`. The hook receives parameters like **selection** and **log** that can be used in customized hooks.
 
 
