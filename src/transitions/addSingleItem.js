@@ -1,7 +1,6 @@
 function addSingleItem ( {task, extractList}, data ) {
         let 
-              { event } = data
-            , target = event.target
+              { event, target } = data
             , [ selection, selectStyle, filter ] = extractList (['selection', 'selectStyle', 'filter'])
             , listHasTarget = selection.includes ( target )
             , validNode = true
