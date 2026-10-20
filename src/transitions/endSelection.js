@@ -28,12 +28,12 @@ function endSelection ({task, dependencies, extractList}, data ) {
         event.preventDefault ()
         selectDraw.style.visibility = 'hidden'
 
-        if ( !newX ) {   // No selection ( newX == false )
+        if ( newX === false ) {   // No mouse move -> no selection frame. ( newX can be 0 )
                         prevSelection.forEach ( el => el.classList.remove ( selectStyle )   )
                         selection = []
                         task.done ({
                                        success : true
-                                     , stateData : { selection }
+                                     , stateData : { selection, mouseSelection: false }
                                 })
                         return
                 } // !newX
@@ -48,7 +48,7 @@ function endSelection ({task, dependencies, extractList}, data ) {
         
         
         let 
-              dragNodes = document.querySelectorAll ( '[draggable]' )
+              dragNodes = document.querySelectorAll ( '[draggable="true"]' )
             , list = []
             ;
 
@@ -59,20 +59,9 @@ function endSelection ({task, dependencies, extractList}, data ) {
             }
         else        dragNodes.forEach ( el => list.push(el)   )
         
-        list.forEach ( el => {
-                            let check = true;
-                            if ( check )   check = el.offsetLeft > xMin
-                            if ( check )   check = el.offsetTop > yMin
-
-                            if ( check ) {
-                                    let lastX = el.offsetLeft + el.clientWidth;
-                                    check = lastX < xMax
-                                }
-                            if ( check ) {
-                                    let lastY = el.offsetTop + el.clientHeight;
-                                    check = lastY < yMax
-                                }
-                            if ( check )   selection.push ( el )
+        list.forEach ( el => {   // Mouse coordinates are viewport based, so compare with the viewport rectangle
+                            const { left, top, right, bottom } = el.getBoundingClientRect ();
+                            if ( left > xMin && top > yMin && right < xMax && bottom < yMax )   selection.push ( el )
                 })
         
         switch ( selectionType ) {
@@ -82,17 +71,17 @@ function endSelection ({task, dependencies, extractList}, data ) {
                                                             return el
                                                         })
                             break
-                case 'expand':
+                case 'expand':   // Previous selection + framed elements
                             selection = selection.reduce ((res,el) => {
-                                                                    if ( !res.includes(el) ) {  
+                                                                    if ( !res.includes(el) ) {
                                                                                     res.push ( el )
                                                                                     el.classList.add ( selectStyle )
                                                                         }
                                                                     return res
-                                                            } , selection )
+                                                            } , [ ...prevSelection ] )
                             break
-                case 'reduce':
-                            selection = selection.reduce ( (res,el) => {
+                case 'reduce':   // Previous selection - framed elements
+                            selection = prevSelection.reduce ( (res,el) => {
                                                                     if ( !selection.includes(el) ) {  
                                                                                     res.push ( el )
                                                                                     el.classList.add ( selectStyle )
