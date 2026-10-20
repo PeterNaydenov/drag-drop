@@ -1,7 +1,6 @@
 function startDragging ( {task, dependencies, extractList}, data ) {
         let 
-              { event  } = data
-            , { target } = event
+              { event, target } = data
             , [ 
                   draggedTransperency
                 , selection
@@ -26,7 +25,10 @@ function startDragging ( {task, dependencies, extractList}, data ) {
                 return
             }
 
-        if ( selection.length === 0 )   selection = [ target ]
+        if ( !selection.includes ( target ) ) {   // Dragging an element outside the selection: drag only that element
+                selection.forEach ( el => el.classList.remove ( selectStyle ) )
+                selection = [ target ]
+            }
         hooks.onStartDragging ({ event, selection, draggedTransperency, selectStyle, dependencies:deps })
 
         st.dragged        = target
