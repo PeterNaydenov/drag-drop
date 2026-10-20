@@ -6,9 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag-Drop</title>
   <style>
+      * { box-sizing: border-box; }
+      html, body {
+                height: 100%;
+                margin: 0;
+            }
       body { 
                 background-color: #fff; 
                 font-family: Arial, Helvetica, sans-serif;
+                overflow: hidden;   /* Demo fits in one screen */
             }
       body .dd-select {
                 background-color: #fff;
@@ -26,46 +32,110 @@
               align-items: center;
               justify-content: center;
           }
-      .gridSpace {
+      .gridSpace {   /* Title on top. Columns: ML + SQ blocks | sidebar | lists */
                display: grid;
-               grid-template-columns: 1rem 1fr 1fr 1rem;
-               grid-gap: 10px;
-               width: 100vw;
+               grid-template-columns: 1fr 1fr 1fr;
+               grid-template-rows: auto 1fr 1fr;
+               gap: 10px;
                height: 100vh;
+               padding: 10px;
+          }
+      .gridSpace > * {
+               min-height: 0;     /* Let grid rows shrink */
+               overflow: auto;    /* Too many items scroll inside the block, not the page */
           }
       .gridTitle {
                 grid-row : 1;
-                grid-column: 2/span 2;
-                text-align: center;
-                padding-top: 1rem;
+                grid-column: 1 / -1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                padding: .4rem;
                 border : 1px solid red;
           }
       .gridBlock {
               grid-row: 2;
-              grid-column: 2;
+              grid-column: 1;
+              padding: 5px;
               background-color:lightseagreen;
           }
       .gridSidebar {
               grid-row: 2 / span 2;
-              grid-column: 3;
+              grid-column: 2;
               padding: 5px;
               background-color:lightcoral;
           }
       .gridBlock2 {
              grid-row: 3;
-             grid-column: 2;
+             grid-column: 1;
              padding: 5px;
              background-color: gray;
           }
     button {
-            padding : 1rem;
+            padding : .5rem 1rem;
         }
+
+      /* Reorder demo */
+      .vlist {
+              grid-row: 2;
+              grid-column: 3;
+              list-style: none;
+              margin: 0;
+              padding: 5px;
+              min-height: 60px;
+              background-color: #eef;
+          }
+      .item {   /* Styled by own class, so it keeps its look in every drop zone */
+              display: block;
+              list-style: none;
+              margin: 4px;
+              padding: .4rem .6rem;
+              background-color: #fff;
+              border: 1px solid #99a;
+          }
+      .hrow {
+              grid-row: 3;
+              grid-column: 3;
+              display: flex;
+              flex-wrap: wrap;
+              align-content: flex-start;
+              gap: 8px;
+              padding: 5px;
+              min-height: 60px;
+              background-color: #efe;
+          }
+      .chip {
+              width: 60px;
+              height: 45px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: #fff;
+              border: 1px solid #9a9;
+          }
+      .dd-placeholder {   /* reorder: 'placeholder' */
+              list-style: none;   /* Placeholder of an <li> outside of a list */
+              background-color: rgba(30, 144, 255, .15);
+              outline: 2px dashed dodgerblue;
+              outline-offset: -2px;
+          }
+      .dd-line {          /* reorder: 'line' with placeholderStyle: 'dd-line' */
+              background-color: dodgerblue;
+          }
   </style>
 </head>
 <body>
     <div class="gridSpace">
                 <div class="gridTitle">
                     <button id="t1" class="ddd">yo</button>
+                    <label>Reorder:
+                        <select id="reorder">
+                            <option value="off">off</option>
+                            <option value="placeholder" selected>placeholder</option>
+                            <option value="line">line</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="gridBlock dropzone">
                             <div class="sq lala" draggable="true">ML</div>
@@ -74,11 +144,35 @@
                 <div class="gridBlock2">
                             <div class="sq" draggable="true">SQ</div>
                     </div>
+                <ul class="vlist dropzone">
+                            <li class="item" draggable="true">One</li>
+                            <li class="item" draggable="true">Two</li>
+                            <li class="item" draggable="true">Three</li>
+                            <li class="item" draggable="true">Four</li>
+                            <li class="item" draggable="true">Five</li>
+                    </ul>
+                <div class="hrow dropzone">
+                            <div class="chip" draggable="true">A</div>
+                            <div class="chip" draggable="true">B</div>
+                            <div class="chip" draggable="true">C</div>
+                            <div class="chip" draggable="true">D</div>
+                            <div class="chip" draggable="true">E</div>
+                            <div class="chip" draggable="true">F</div>
+                            <div class="chip" draggable="true">G</div>
+                    </div>
         </div>
     
     <script type="module">
         import dragDrop from './dist/drag-drop.esm.mjs'    
-        dragDrop ()
+        const reorderStyles = {
+                                  off         : { reorder: false }
+                                , placeholder : { reorder: 'placeholder', placeholderStyle: 'dd-placeholder' }
+                                , line        : { reorder: 'line'       , placeholderStyle: 'dd-line'        }
+                            }
+        dragDrop ( reorderStyles.placeholder )
+            .then ( api => {
+                        document.getElementById ( 'reorder' ).addEventListener ( 'change', e => api.changeConfig ( reorderStyles[e.target.value] ))
+                })
         document.getElementById ( 't1' ).addEventListener ( 'click', ()=> {
                                                     console.log ( 'YOOM' )
                                             })
