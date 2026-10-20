@@ -8,6 +8,7 @@ import { replaceSelection } from './replaceSelection'
 
 import { startDragging    } from './startDragging'
 import { changeDragZone   } from './changeDragZone'
+import { changePosition   } from './changePosition'
 import { endDragging      } from './endDragging'
 import { drop             } from './drop'
 
@@ -29,6 +30,7 @@ const tranistions = {
 
                         , startDragging
                         , changeDragZone
+                        , changePosition
                         , endDragging
                         , drop
 
