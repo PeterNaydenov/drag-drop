@@ -1,6 +1,12 @@
 ## Release History
 
 
+
+### 0.6.0 ( 2026-10-20)
+- [x] Reorder items;
+
+
+
 ### 0.5.0 ( 2026-10-20)
 - [x] Dependency update: @peter.naydenov/fsm v.5.3.0;
 
