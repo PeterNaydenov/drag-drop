@@ -21,12 +21,20 @@ const
     dragMachine.setDependencies ({ 'deps': config.dependencies })    
     dragMachine.setDependencies ({ eFn, fn })
     
+    let activeHooks = hooks;   // Default hooks + hooks from config
+    const setHooks = h => {
+                            if ( !h )   return   // No transition ( e.g. 'changeConfig' during drag ). Keep the current hooks
+                            activeHooks = h
+                            dragMachine.setDependencies ({ hooks: h })
+                        };
+
     return dragMachine.update ( 'start', { config, hooks } )
-               .then ( hooks => dragMachine.setDependencies ({ hooks })    )
+               .then ( setHooks )
                .then ( () => ({
                                   changeConfig : config => {
-                                                        dragMachine.update ( 'changeConfig', {hooks,config} )
-                                                                   .then   ( hooks => dragMachine.setDependencies({hooks})   )
+                                                        if ( config && config.dependencies )   dragMachine.setDependencies ({ 'deps': config.dependencies })
+                                                        return dragMachine.update ( 'changeConfig', { hooks:activeHooks, config } )
+                                                                          .then   ( setHooks )
                                                     }
                                 , destroy     : ()    => dragMachine.update ( 'destroy' )
                                 , disable     : ()    => dragMachine.update ( 'disable' )
