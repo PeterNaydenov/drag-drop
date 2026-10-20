@@ -8,7 +8,9 @@ import getDraggable from './getDraggable'
 function getEventFunctions ( dragDrop, ignoreSelect ) {
     return {
           mouseDown: event => {
+                if ( event.button !== 0                  )   return   // Left mouse button only
                 if ( getDraggable ( event.target )       )   return
+                if ( isInteractive ( event.target )      )   return   // Selection calls preventDefault and that blocks focus of form fields
                 if ( ignoreSelect && ignoreSelect(event) )   return
                 dragDrop.update ( 'select', {event})
             }
@@ -36,11 +38,22 @@ function getEventFunctions ( dragDrop, ignoreSelect ) {
                             dragDrop.ignoreCachedUpdates ()
                             dragDrop.update ( 'end', {event})
                     }
-        , dragOver  : event => event.preventDefault ()   // Prevent default to allow drop
+        , dragOver  : event => {
+                            event.preventDefault ()   // Prevent default to allow drop
+                            dragDrop.update ( 'over', {event})
+                    }
         , dragEnter : event => dragDrop.update ( 'move', {event})
         , drop      : event => dragDrop.update ( 'drop', {event})
     
     }} // getEventFunctions func.
+
+
+
+function isInteractive ( node ) {   // Form fields and editable content
+        const el = ( node && node.nodeType === 1 ) ? node : node && node.parentElement;
+        if ( !el )   return false
+        return el.isContentEditable || !!el.closest ( 'input, textarea, select, option, button, label' )
+} // isInteractive func.
 
 
 
