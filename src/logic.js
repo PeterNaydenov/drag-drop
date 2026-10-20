@@ -15,6 +15,7 @@ const table = [
     , [ 'ready'    , 'drag'        , 'inDrag'     , 'startDragging'   ]
     , [ 'inDrag'   , 'end'         , 'ready'      , 'endDragging'     ]
     , [ 'inDrag'   , 'move'        , 'inDrag'     , 'changeDragZone'  ]
+    , [ 'inDrag'   , 'over'        , 'inDrag'     , 'changePosition'  ]
     , [ 'inDrag'   , 'drop'        , 'inDrag'     , 'drop'            ]   
     
     // Mute for a while
@@ -44,6 +45,9 @@ const logic = {
                                 , selectDraw           : null         // DOM node for showing selection
                                 , mouseSelection       : false        // Selection mode flag
                                 , hasDrop              : false        // Flag[boolean]. It's true when registered drop event.
+                                , reorder              : false        // Show the drop position among drag nodes. Values: false | 'placeholder' | 'line'
+                                , placeholderStyle     : 'dd-placeholder' // CSS class name for the drop position indicator
+                                , indicator            : null         // DOM node of the drop position indicator
                                 , dragOffset           : null         // Values: Null or object with {x,y} coordinates or of the drag click. Can be used in 'onDrop' function for precise positioning.
 
                                 , startX : 0
