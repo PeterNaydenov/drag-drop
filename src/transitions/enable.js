@@ -1,5 +1,5 @@
 function enable ( {task}) {
-    task.don ({ success : true })
+    task.done ({ success : true })
 } // enable func.
 
 
