@@ -21,7 +21,7 @@
         "serve": "vite preview"
     },
     "dependencies": {
-        "@peter.naydenov/fsm": "^5.2.7"
+        "@peter.naydenov/fsm": "^6.1.0"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^29.0.3",
