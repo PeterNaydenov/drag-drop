@@ -2,7 +2,7 @@ function replaceSelection ( { task, extractList}, data ) {
         let 
               { event } = data
             , [ selectStyle, filter, selection ] = extractList ([ 'selectStyle', 'filter', 'selection' ])
-            , target = event.target
+            , { target } = data
             , validNode = true
             ;
 
